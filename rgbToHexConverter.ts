@@ -1,9 +1,9 @@
 export function rgb(r: number, g: number, b: number): string {
-  // first char is 1-16, second 17-32 (x + y)
+  // first char is 0-15, second 16-31 (x + y)
   //
   // create a map object (13: D, 15: F ...)
   // num / 16 = first char
-  // num % 16 = secon char
+  // num % 16 = second char
   // create the hex code for each color
   // concatenate and return string
 
@@ -29,29 +29,15 @@ export function rgb(r: number, g: number, b: number): string {
       color = 0;
     }
 
-    // let firstChar = Math.floor(color / 16);
-    // let secondChar = Math.floor(color % 16);
-
     const hexChars = [Math.floor(color / 16), Math.floor(color % 16)];
 
     for (let char of hexChars) {
       if (char > 9) {
-        outputHex += map[char];
+        outputHex += hexMap[char];
       } else {
         outputHex += char;
       }
     }
-
-    //     if (firstChar > 9) {
-    //       outputHex += map[firstChar];
-    //     } else {
-    //       outputHex += firstChar;
-    //     }
-    //     if (secondChar > 9) {
-    //       outputHex += map[secondChar];
-    //     } else {
-    //       outputHex += secondChar;
-    //     }
   }
 
   return outputHex;
