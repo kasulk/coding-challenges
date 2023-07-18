@@ -6,12 +6,18 @@ export function vowelShift(text: string | null, n: number): string | null {
   // loop through every letter of the input text again
   // replace every vowel with the elements from the array
 
+  console.log(text);
+
   const vowels = ["a", "e", "i", "o", "u"];
-  let vowelsInInputText: string[] | null = [];
+  //   let vowelsInInputText: string[] | null = []
+  let vowelsInInputText: string[] = [];
 
-  if (text === null) return null;
+  //   console.log(vowelsInInputText)
 
-  const characters = text.split("");
+  if (text === null) return text;
+
+  const characters: string[] = text.split("");
+  //   const characters = text.split('')
 
   for (let character of characters) {
     if (vowels.includes(character)) {
@@ -24,8 +30,11 @@ export function vowelShift(text: string | null, n: number): string | null {
   let lastVowel = "";
 
   for (let i = 0; i < n; i++) {
+    console.log(vowelsInInputText);
     lastVowel = vowelsInInputText.pop() as string;
+    console.log(lastVowel);
     vowelsInInputText.unshift(lastVowel);
+    console.log(vowelsInInputText);
   }
 
   //   for (let character of characters) {
@@ -34,15 +43,23 @@ export function vowelShift(text: string | null, n: number): string | null {
   //   }
 
   let outputText: string[] = [];
+  //   const filteredArray: string[] = characters.filter((item): item is string => item !== undefined);
 
   if (vowelsInInputText) {
-    const outputText = characters.map((character) => {
+    //     console.log(vowelsInInputText)
+    console.log("-----------");
+    outputText = characters.map((character) => {
+      //       outputText = filteredArray.map((character) => {
+      //       if (vowels.includes(character)) {
       if (vowels.includes(character) && vowelsInInputText !== null) {
+        //       if (vowels.includes(character) && vowelsInInputText !== undefined && vowelsInInputText !== null) {
+        //         console.log(vowelsInInputText)
         return vowelsInInputText.shift();
       } else {
         return character;
       }
     });
+    console.log(outputText.join(""));
   }
 
   return outputText.join("");
