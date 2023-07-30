@@ -1,18 +1,16 @@
 export function basicOp(
   operation: string,
-  value1: number,
-  value2: number
-): number {
+  a: number,
+  b: number
+): number | undefined {
   switch (operation) {
     case "+":
-      return value1 + value2;
+      return a + b;
     case "-":
-      return value1 - value2;
+      return a - b;
     case "*":
-      return value1 * value2;
+      return a * b;
     case "/":
-      return value1 / value2;
-    default:
-      return 0;
+      return a / b;
   }
 }
