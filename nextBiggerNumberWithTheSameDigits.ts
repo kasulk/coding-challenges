@@ -9,7 +9,7 @@ export function nextBigger(n: number): number {
 
   if (Number(n.toString.split("").sort().join("")) === n) return -1;
 
-  return "bla";
+  return 0;
 }
 
 // 1234, 1243
