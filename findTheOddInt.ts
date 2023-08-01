@@ -1,20 +1,33 @@
 export const findOdd = (xs: number[]): number => {
   // happy coding!
-  // loop through input array
-  // save the first number
-  // check if the second number is the same
-  // if so, delete it
-  // go on until the end of the array and return the number
+  // save the first number in variable
+  // if the next number is not the same
+  // check the length of the output array
+  // if its odd, return output[0]
+  // if even, wipe the array
 
-  /// if number is included in the array only once, return it
+  if (xs.length === 1) return xs[0];
 
-  let output = xs[0];
+  xs.sort();
 
-  for (let i = 1; i < xs.length; i++) {
-    if (xs[i] !== output) {
-      output = xs[i];
+  //note: too slow...
+
+  let output: number[] = [xs[0]];
+  console.log(xs[xs.length - 1]);
+
+  for (let i = 0; i < xs.length - 1; i++) {
+    //     console.log('=======================')
+    //     console.log('output before:', output)
+    //     console.log(xs[i], xs[i+1])
+
+    if (xs[i] !== xs[i + 1] && output.length % 2 !== 0) {
+      return output[0];
+    } else if (output.length % 2 === 0) {
+      output = [];
     }
+    output.push(xs[i]);
+    //     console.log('output after:', output)
   }
 
-  return output;
+  return xs[xs.length - 1];
 };
