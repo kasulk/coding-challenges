@@ -9,25 +9,41 @@ export function humanReadable(seconds: number): string {
   // multiply the after comma by 60 to get the secs
 
   let output = "";
+  let restSeconds: number;
 
   //   let hours = seconds / 3600;  if (inputSeconds===0) {const hours = 0}
 
-  let hours = (seconds / 3600).toString().split(".");
-  if (Number(hours[0]) < 10) output += "0";
-  output += hours[0] + ":";
+  let hours = seconds / 3600; //.toString().split(".");
+  if (Math.floor(hours) < 10) {
+    output += "0";
+  }
+  output += Math.floor(hours) + ":";
 
-  //   let restSeconds = hours % 1;
-  hours[1] = "." + hours[1];
-  let mins = (Number(hours[1]) * 60).toString().split(".");
-  if (Number(mins[0]) < 10) output += "0";
-  output += mins[0] + ":";
+  //   console.log(hours);
+  //   console.log(output);
 
-  mins[1] = "." + mins[1];
-  //   restSeconds = mins % 1;
-  let secs = (Number(mins[1]) * 60).toString().split(".");
-  if (Number(secs[0]) < 10) output += "0";
-  output += secs[0];
+  restSeconds = (hours % 1) * 60;
+  // console.log(restSeconds)
+
+  let mins = Math.floor(restSeconds);
+  if (Math.floor(mins) < 10) {
+    output += "0";
+  }
+  output += mins + ":";
+  restSeconds = (restSeconds % 1) * 60;
+  // console.log(restSeconds)
+
+  //   let secs = restSeconds.toFixed();
+  let secs = Math.round(restSeconds);
+  if (Math.floor(secs) < 10) {
+    output += "0";
+  }
+
+  output += secs;
 
   //   return "99:59:59";
   return output;
 }
+
+// humanReadable(0);
+// humanReadable(86399)
