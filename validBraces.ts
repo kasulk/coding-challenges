@@ -1,53 +1,36 @@
 export function validBraces(braces: string): boolean {
-  // create a map object for the opening and corresponding closing braces
-  // loop through the input string
-  // if a opening brace isn't followed by it's closing brace, store it in an array
-  // if a closing brace is found, check the last element in the array, if it is the corresponding opening one
-  // if not, return false
-  // if yes, go on until the end of the input string
-  // return true
+  // loop through characters of input string
+  // if the brace is opening, push it into a stack array
+  // if the brace is closing,
+  /// and if the last element of the stack is the corresponding opening brace
+  /// pop the opening brace from the stack array
+  // else return false
+  // after the loop, if the stack is empty, return true
 
   const braceMap: { [key: string]: string } = {
-    "(": ")",
-    "[": "]",
-    "{": "}",
+    ")": "(",
+    "]": "[",
+    "}": "{",
   };
 
-  const openingBraces = ["(", "[", "{"];
-  const closingBraces = [")", "]", "}"];
+  const openingBrace = new RegExp(/\(|\[|\{/);
+  const closingBrace = new RegExp(/\)|\]|\}/);
+  const stack: string[] = [];
 
-  console.log(braces.split(""));
-  // console.log([].pop())
-
-  let openingBraceStack: string[] = [];
-
-  for (let i = 0; i < braces.length; i++) {
-    // if element is opening brace
-    if (openingBraces.includes(braces[i])) {
-      console.log(braces[i]);
-      // and the next element isn't the corresponding closing bracket
-      if (braces[i + 1] !== braceMap[braces[i]]) {
-        // store it in the array
-        openingBraceStack.push(braceMap[braces[i]]);
-        console.log(openingBraceStack);
-      } else {
-        // if the next is the closing one
-        i++;
-      }
+  for (let element of braces) {
+    if (openingBrace.test(element)) {
+      stack.push(element);
+      continue;
     }
 
-    if (closingBraces.includes(braces[i])) {
-      // console.log(braces[i], '---', openingBraceStack)
-      if (braces[i] !== openingBraceStack.pop()) {
-        // console.log('yes')
-        return false;
+    if (closingBrace.test(element)) {
+      if (stack[stack.length - 1] === braceMap[element]) {
+        stack.pop();
+        continue;
       }
+      return false;
     }
   }
 
-  return openingBraceStack.length === 0;
+  return !stack.length;
 }
-
-//! "[({})](]" =>  False
-// validBraces("()")// => true
-validBraces("[({})](]"); // =>  Fals    e
