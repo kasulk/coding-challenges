@@ -16,13 +16,21 @@ const fixParentheses = (str) => {
   for (let i = 0; i < str.length; i++) {
     if (str[i] === "(") {
       unclosedCount++;
-    } else if (str[i] === ")") {
-      if (!unclosedCount) {
-        unopenedCount++;
-      } else {
-        unclosedCount--;
-      }
+      continue;
     }
+
+    if (str[i] !== ")") {
+      continue;
+    }
+
+    if (unclosedCount) {
+      unclosedCount--;
+      continue;
+    }
+
+    unopenedCount++;
+
+    console.log(unclosedCount);
   }
 
   return "(".repeat(unopenedCount) + str + ")".repeat(unclosedCount);
@@ -31,6 +39,3 @@ const fixParentheses = (str) => {
 //? Input: "(()("
 //..........1212
 // Input: "))))(()("
-
-// count unclosed
-// count unopened
