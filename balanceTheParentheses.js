@@ -1,17 +1,16 @@
 const fixParentheses = (str) => {
-  // loop through elements of the input string
-  // if the paren is opening, increase unclosed count by 1
-  // if the paren is closing, and the unclosed counter is 0,
+  // loop through characters of the input string
+  // if it is an opening paren, increase unclosed count by 1
+  // if it is a closing paren, and the unclosed counter is 0,
   /// increase unopened count by 1
-  //// prepend opening paren
   // if the paren is closing, and the unclosed counter is > 0,
   /// reduce unclosed counter by 1
-  // at the end, append as many closing parens as the value of the unclosed counter is
-  // and prepend as many opening parens as the value of the unopened counter is
-  console.log(str);
+  // after the loop,
+  /// append as many closing parens as the value of the unclosed counter is and
+  /// prepend as many opening parens as the value of the unopened counter is
 
-  let unclosedCount,
-    unopenedCount = 0;
+  let unclosedCount = 0;
+  let unopenedCount = 0;
 
   for (let i = 0; i < str.length; i++) {
     if (str[i] === "(") {
@@ -19,23 +18,13 @@ const fixParentheses = (str) => {
       continue;
     }
 
-    if (str[i] !== ")") {
+    if (!unclosedCount) {
+      unopenedCount++;
       continue;
     }
 
-    if (unclosedCount) {
-      unclosedCount--;
-      continue;
-    }
-
-    unopenedCount++;
-
-    console.log(unclosedCount);
+    unclosedCount--;
   }
 
   return "(".repeat(unopenedCount) + str + ")".repeat(unclosedCount);
 };
-
-//? Input: "(()("
-//..........1212
-// Input: "))))(()("
