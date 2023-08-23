@@ -1,11 +1,12 @@
-export function solution(roman: string): number {
+export function solution(romanNum: string): number {
   // create a map object
-  // loop through elements of input string
-  // if the current roman number is smaller than the next
-  // subtract it from the next
-  ///? by storing it to a variable
-  // concatenate the decoded number to a result string
-  // convert the resulted numbers string into a number and return it
+  // create an array with converted digits as decimal numbers
+  // loop through this numbers
+  // if current number is smaller than the next
+  /// store it in a variable
+  // else subtract what is currently in the stack from the current number and
+  // add the (calculated) digit to a sum variable
+  // return the sum
 
   const romanNumbersMap: { [romanNumber: string]: number } = {
     I: 1,
@@ -16,24 +17,25 @@ export function solution(roman: string): number {
     D: 500,
     M: 1000,
   };
-  let output = 0;
-  const decimalNums: number[] = [];
+
   let stack = 0;
+  let sum = 0;
+  const decimalNums: number[] = [];
 
   // turn the roman digits into decimal numbers
-  for (let letter of roman) {
+  for (let letter of romanNum) {
     decimalNums.push(romanNumbersMap[letter]);
   }
 
   for (let i = 0; i < decimalNums.length; i++) {
-    if (decimalNums[i] < decimalNums[i + i]) {
+    if (decimalNums[i] < decimalNums[i + 1]) {
       stack += decimalNums[i];
       continue;
     }
 
-    output += decimalNums[i] - stack;
+    sum += decimalNums[i] - stack;
     stack = 0;
   }
 
-  return output;
+  return sum;
 }
