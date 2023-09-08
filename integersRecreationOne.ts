@@ -10,6 +10,9 @@ export const listSquared = (m: number, n: number): number[][] => {
   // after the outer loop, return the output array
 
   //? inner loop only once
+  //? are some numbers skippable
+  // check each number j if it is a divisor of each number i (m to n)
+  // if yes, square j
 
   console.log(m, n);
 
@@ -20,11 +23,16 @@ export const listSquared = (m: number, n: number): number[][] => {
     // console.log("------------");
     // console.log(i);
 
-    for (let j = 1; j <= i; j++) {
+    // for (let j = 1; j <= i; j++) {
+    for (let j = 1; j <= Math.floor(Math.sqrt(i)); j++) {
       //   console.log("j:", j, i % j === 0);
 
       if (i % j === 0) {
         sum += j * j;
+        // new:
+        if (j !== i / j) {
+          sum += (i / j) * (i / j);
+        }
         // console.log("sum:", sum);
       }
     }
