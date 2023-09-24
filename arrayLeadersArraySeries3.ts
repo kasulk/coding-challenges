@@ -3,15 +3,13 @@ export function arrayLeaders(numbers: number[]): number[] {
   // loop through input array, for each element
   /// subtract it from the remainingSum
   /// and check if its greater than the new remainingSum
-  /// if yes add it to an output array
-  // after the loop, return the output array
+  /// (and in case its 0, check explicitly if its > remainingSum)
+  /// if yes, add it to an output array
 
-  let remainingSum = numbers.reduce((sum, curr) => sum + curr);
+  let remainingSum: number = numbers.reduce((sum, curr) => sum + curr, 0);
 
-  const output: number[] = numbers.filter((num) => {
+  return numbers.filter((num) => {
     remainingSum -= num;
-    if (num > remainingSum) return num;
+    return num > remainingSum || (num === 0 && num > remainingSum);
   });
-
-  return output;
 }
