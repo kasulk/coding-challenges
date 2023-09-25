@@ -1,23 +1,22 @@
 export const mix = (s1: string, s2: string): string => {
+  // create 2 objects that have the letters a-z as keys and 0 as values
+
   // remove everything that is not a lower case letter from the input arrays
   // sort the resulting arrays
-  // create a constructor function,
-  // that has an id and the letters a-z as keys and 0 as values
-  // create an instance for each array
-  // loop through each array
-  //
-  // for each letter in the array, increase its corresponding value in its object by 1
-  // after the loop
-  // loop through 1 of the objects
-  // check which value of the current letter key is higher,
-  // add this value (repeated) with the id of the object to an array
-  // if the values are equal, add a '=' instead of the object id
-  // return this array joined with '/' as a string
 
-  const output: string[][] = [];
+  // for each letter in the array,
+  /// increase its corresponding value in its object by 1
 
-  const sortedLowerCaseLettersOfS1 = s1.match(/[a-z]/g)?.sort();
-  const sortedLowerCaseLettersOfS2 = s2.match(/[a-z]/g)?.sort();
+  // for each key in one of the objects
+  /// check which value of the current letter key is higher,
+  /// if its <= 1, discard it
+  /// else, add an array with this value (repeated) and
+  /// with the id of the object to an array
+  /// if the values are equal, add a '=' instead of the object id
+
+  // sort the labeledLetterStacks collection, first by length, then by their id
+  // concat the inner arrays with ':'
+  // return this array concated with '/' as a string
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
@@ -29,27 +28,32 @@ export const mix = (s1: string, s2: string): string => {
     lettersInS2[letter] = 0;
   }
 
+  const sortedLowerCaseLettersOfS1 = s1.match(/[a-z]/g)?.sort();
+  const sortedLowerCaseLettersOfS2 = s2.match(/[a-z]/g)?.sort();
+
   sortedLowerCaseLettersOfS1?.forEach((letter) => lettersInS1[letter]++);
   sortedLowerCaseLettersOfS2?.forEach((letter) => lettersInS2[letter]++);
+
+  const labeledLetterStacks: string[][] = [];
 
   for (let key in lettersInS1) {
     if (lettersInS1[key] > lettersInS2[key]) {
       if (lettersInS1[key] <= 1) continue;
-      output.push(["1", key.repeat(lettersInS1[key])]);
+      labeledLetterStacks.push(["1", key.repeat(lettersInS1[key])]);
       continue;
     }
     if (lettersInS1[key] < lettersInS2[key]) {
       if (lettersInS2[key] <= 1) continue;
-      output.push(["2", key.repeat(lettersInS2[key])]);
+      labeledLetterStacks.push(["2", key.repeat(lettersInS2[key])]);
       continue;
     }
     if (lettersInS1[key] === lettersInS2[key]) {
       if (lettersInS1[key] <= 1) continue;
-      output.push(["=", key.repeat(lettersInS1[key])]);
+      labeledLetterStacks.push(["=", key.repeat(lettersInS1[key])]);
     }
   }
 
-  return output
+  return labeledLetterStacks
     .sort((a, b) => {
       if (a[1].length > b[1].length) return -1;
       if (a[1].length < b[1].length) return 1;
