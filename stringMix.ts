@@ -14,18 +14,15 @@ export const mix = (s1: string, s2: string): string => {
   // if the values are equal, add a '=' instead of the object id
   // return this array joined with '/' as a string
 
-  console.log(s1);
-  console.log(s2);
-
-  let output: string[] = [];
+  const output: string[][] = [];
 
   const sortedLowerCaseLettersOfS1 = s1.match(/[a-z]/g)?.sort();
   const sortedLowerCaseLettersOfS2 = s2.match(/[a-z]/g)?.sort();
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-  let lettersInS1: { [key: string]: number } = {};
-  let lettersInS2: { [key: string]: number } = {};
+  const lettersInS1: { [key: string]: number } = {};
+  const lettersInS2: { [key: string]: number } = {};
 
   for (let letter of alphabet) {
     lettersInS1[letter] = 0;
@@ -35,30 +32,31 @@ export const mix = (s1: string, s2: string): string => {
   sortedLowerCaseLettersOfS1?.forEach((letter) => lettersInS1[letter]++);
   sortedLowerCaseLettersOfS2?.forEach((letter) => lettersInS2[letter]++);
 
-  //   console.log(lettersInS1);
-  //   console.log(lettersInS2);
-
   for (let key in lettersInS1) {
     if (lettersInS1[key] > lettersInS2[key]) {
       if (lettersInS1[key] <= 1) continue;
-      output.push("1:" + key.repeat(lettersInS1[key]));
+      output.push(["1", key.repeat(lettersInS1[key])]);
       continue;
     }
     if (lettersInS1[key] < lettersInS2[key]) {
       if (lettersInS2[key] <= 1) continue;
-      output.push("2:" + key.repeat(lettersInS2[key]));
+      output.push(["2", key.repeat(lettersInS2[key])]);
       continue;
     }
     if (lettersInS1[key] === lettersInS2[key]) {
       if (lettersInS1[key] <= 1) continue;
-      output.push("=:" + key.repeat(lettersInS1[key]));
+      output.push(["=", key.repeat(lettersInS1[key])]);
     }
   }
 
-  console.log(output);
-  console.log(output.join("/"));
-  return output.join("/");
+  return output
+    .sort((a, b) => {
+      if (a[1].length > b[1].length) return -1;
+      if (a[1].length < b[1].length) return 1;
+      if (a[0] > b[0]) return 1;
+      if (a[0] < b[0]) return -1;
+      return 0;
+    })
+    .map((innerArray) => innerArray.join(":"))
+    .join("/");
 };
-
-// mix("babalblubralf", "schnuppelpups");
-// mix("aaa bbbb ccccc", "aaaaa bbbb ccc");
