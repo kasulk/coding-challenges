@@ -2,7 +2,7 @@
  * @param {string} s
  * @return {number}
  */
-var lengthOfLastWord = function(s) {
+var lengthOfLastWord = function (s) {
   // let sArr = s.split(" ");
   // let words = [];
 
@@ -21,16 +21,9 @@ var lengthOfLastWord = function(s) {
     if (s[i] != " ") hasStarted = true;
     if (hasStarted) {
       if (s[i] == " ") break;
-
       len++;
     }
   }
 
   return len;
-
-
 };
-
-console.log(lengthOfLastWord("Hello World"));
-console.log(lengthOfLastWord("   fly me   to   the moon  "));
-console.log(lengthOfLastWord("luffy is still joyboy"));
