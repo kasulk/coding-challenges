@@ -13,7 +13,7 @@ export class Bowling {
    * is called each time the player rolls a ball. The argument is the number of pins knocked down.
    */
   roll(pins) {
-    // add points earned with previous throws
+    // add points qualified for with previous frames
     if (this.countNextPoints) {
       this.totalScore += pins * this.countNextPoints;
       this.countNextPoints = 0;
@@ -23,7 +23,7 @@ export class Bowling {
       this.countNextPoints++;
     }
 
-    // process current throw
+    // process current frame
     if (this.frameNum < 11) {
       //
       if (pins === 10) {
