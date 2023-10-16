@@ -1,43 +1,37 @@
 export function lastSurvivors(str: string): string {
-  //// create a variable with all letters of the alphabet
-  // create an array containing subarrays
-  // every subarray has two elements
-  // a letter of the alphabet and a counter, initially set to 0
+  // create an object with the count of each letter of the alphabet
+  // with each counter, initially set to 0
   // loop through the input string, for each letter
-  // increase the counter in the corresponding subarray by 1
-  //
-  // loop through the subarrays, for each subarray
-  // divide the counter by 2, overwrite it with the remainder and round the result down
-  // add the result to the next subarray
-  // return a string with the remaining count of letters
+  // increase the corresponding counter in the object
+  // if the current letter count is 2
+  /// increase the next letter count by 1, and set the current to 0
+  /// do this as long as the next letter count has increased to 2
+  // after the loop, add each letter as often as its counter value to an output string
+  // return this output string
 
-  const alphabet = "abcdefghijklmnopqrstuvwxyza";
+  const alphabetPlus = "abcdefghijklmnopqrstuvwxyza";
+  let result = "";
 
   // create an object with the count of each letter
-  const lettersCounter: { [key: string]: number } = {};
-  alphabet.split("").forEach((letter) => (lettersCounter[letter] = 0));
+  const lettersCounters: { [key: string]: number } = {};
+  alphabetPlus.split("").forEach((letter) => (lettersCounters[letter] = 0));
 
   str.split("").forEach((letter) => {
-    lettersCounter[letter]++;
+    lettersCounters[letter]++;
 
-    while (lettersCounter[letter] >= 2) {
-      const nextLetter = alphabet[alphabet.indexOf(letter) + 1];
-      lettersCounter[nextLetter] =
-        lettersCounter[nextLetter] + Math.trunc(lettersCounter[letter] / 2);
+    while (lettersCounters[letter] === 2) {
+      const nextLetter = alphabetPlus[alphabetPlus.indexOf(letter) + 1];
 
-      lettersCounter[letter] = lettersCounter[letter] % 2;
+      lettersCounters[nextLetter]++;
+      lettersCounters[letter] = 0;
 
       letter = nextLetter;
     }
   });
 
-  console.log(lettersCounter);
-
-  let output = "";
-
-  for (let key in lettersCounter) {
-    output += key.repeat(lettersCounter[key]);
+  for (let letter in lettersCounters) {
+    result += letter.repeat(lettersCounters[letter]);
   }
 
-  return output;
+  return result;
 }
