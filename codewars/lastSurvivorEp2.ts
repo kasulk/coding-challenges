@@ -18,14 +18,16 @@ export function lastSurvivors(str: string): string {
   alphabet.split("").forEach((letter) => (lettersCounter[letter] = 0));
 
   str.split("").forEach((letter) => {
-    const nextLetter = alphabet[alphabet.indexOf(letter) + 1];
     lettersCounter[letter]++;
 
-    if (lettersCounter[letter] >= 2) {
+    while (lettersCounter[letter] >= 2) {
+      const nextLetter = alphabet[alphabet.indexOf(letter) + 1];
       lettersCounter[nextLetter] =
         lettersCounter[nextLetter] + Math.trunc(lettersCounter[letter] / 2);
 
       lettersCounter[letter] = lettersCounter[letter] % 2;
+
+      letter = nextLetter;
     }
   });
 
@@ -39,5 +41,3 @@ export function lastSurvivors(str: string): string {
 
   return output;
 }
-// lastSurvivors("aabz");
-// lastSurvivors("abaa");
