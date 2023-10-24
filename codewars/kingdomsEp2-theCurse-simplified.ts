@@ -8,35 +8,31 @@ export function translate(speech: string, vocabulary: string[]): string {
   // return the result
 
   const speechArr = speech.split(/([\s?!,.])/);
-  console.log(speechArr);
-  console.log(vocabulary);
+  // console.log(speechArr);
+  // console.log(vocabulary);
 
-  const output = [];
+  const output: string[] = [];
+
   speechArr.map((str) => {
-    console.log(str);
+    // console.log(str);
     if (str.length < 2) output.push(str);
-    // const wordsWithSameLength = vocabulary.filter(
-    // (word) => word.length === str.length
-    // );
-    // console.log(wordsWithSameLength)
 
-    // wordsWithSameLength.forEach((word) => {
     vocabulary.forEach((word) => {
-      // console.log(word.length)
-      // if (/[\s?!,.]/.test(word)) console.log('yes')// output.push(word)
-      // if (word.length === 1) output.push(word)
       for (let i = 0; i < str.length; i++) {
+        if (str.length !== word.length) break;
+        if (i === str.length - 1 && str[i] === "*") output.push(word);
         if (str[i] === "*") continue;
-        console.log(str, str[i], word[i], output);
+        // console.log(str, str[i], word[i], output);
 
         if (str[i] !== word[i]) break;
         if (i === str.length - 1) output.push(word);
       }
     });
   });
-  console.log(output);
+  // console.log("---result:", output.join(""));
   return output.join("");
 }
 
-translate("***lo w***d!", ["hello", "world"]);
+// translate("***lo w***d!", ["hello", "world"]);
 // translate('***lo!', ["hello"])
+// translate("hell*, w***d!", ["hello", "hell", "word", "world"]);
