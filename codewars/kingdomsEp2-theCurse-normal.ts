@@ -4,47 +4,40 @@ export function translate(speech: string, vocabulary: string[]): string {
   // if the word from speech possibly fits more than 1 words from vocabulary
   // skip it (for now)
 
-  const fragmentsOfSpeech = speech.split(/(\s?!,.)/);
+  let speechFragments = speech.split(/([\s?!,.])/);
+
   const translation: string[] = [];
+  let possibleTranslations: string[] = [];
 
-  for (let fragmentOfSpeech of fragmentsOfSpeech) {
-    // check if current fragment is a word
-    if (fragmentOfSpeech.length < 3) {
-      // maybe not neccessary
-      translation.push(fragmentOfSpeech);
-      continue;
-    }
+  while (speechFragments.join("").includes("*")) {
+    // console.log(speechFragments);
 
-    if (!fragmentOfSpeech.includes("*")) continue;
+    for (let fragment of speechFragments) {
+      if (fragment.length < 3) continue;
+      if (!fragment.includes("*")) continue;
 
-    vocabulary.forEach((word) => {
-      if (word.length === fragmentOfSpeech.length) {
-        let possibleTranslationsCount = 0;
-        const lettersOfVocabularyWord = word.split("");
+      vocabulary.forEach((word) => {
+        if (wordsMatch(fragment, word)) possibleTranslations.push(word);
+      });
 
-        for (let i = 0; i < lettersOfVocabularyWord.length; i++) {
-          const vocWordLetter = lettersOfVocabularyWord[i];
-          const speechWordLetter = fragmentOfSpeech[i];
-
-          // if letter is asterisk, skip current letter
-          if (speechWordLetter === "*") continue;
-
-          // if letters don't match, skip current word
-          if (speechWordLetter !== vocWordLetter) break;
-
-          if (speechWordLetter.length === i) possibleTranslationsCount++;
-        }
-        // if its the only possible translation, add it to the translation
-        if ((possibleTranslationsCount = 1)) translation.push(word);
-
-        // if there is more possiblities, check the next word first
+      if (possibleTranslations.length === 1) {
+        speechFragments = speechFragments.map((element) =>
+          element.replace(fragment, possibleTranslations[0])
+        );
+        vocabulary = vocabulary.filter(
+          (word) => word !== possibleTranslations[0]
+        );
       }
-    });
-    //
+
+      possibleTranslations = [];
+    }
   }
+
+  return speechFragments.join("");
 }
 
-function compareWords(word1: string, word2: string): boolean {
+//
+function wordsMatch(word1: string, word2: string): boolean {
   if (word1.length !== word2.length) return false;
 
   for (let i = 0; i < word1.length; i++) {
@@ -54,3 +47,5 @@ function compareWords(word1: string, word2: string): boolean {
 
   return true;
 }
+
+translate("a**? *c*. **e,", ["ace", "acd", "abd"]);
