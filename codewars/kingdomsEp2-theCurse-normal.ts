@@ -1,37 +1,33 @@
 export function translate(speech: string, vocabulary: string[]): string {
-  // as long as there is an asterisk in speech
-  // loop over the words from speech
-  // if the word from speech possibly fits more than 1 words from vocabulary
+  // as long as there is an asterisk in translation
+  // loop over the fragments from speech
+  // if the fragment from speech possibly fits more than 1 words from vocabulary
   // skip it (for now)
+  // else replace it in translation, and remove the word from vocabulary
 
   let translation = speech;
-  let possibleTranslations: string[] = [];
+  let fittingWords: string[] = [];
 
   while (translation.includes("*")) {
-    let speechFragments = translation.split(/([\s?!,.])/);
-    // console.log(speechFragments);
+    const speechFragments = translation.split(/([\s?!,.])/);
 
     for (let fragment of speechFragments) {
-      if (fragment.length < 3) continue;
-      if (!fragment.includes("*")) continue;
+      if (!fragment.includes("*") || fragment.length < 3) continue;
 
       vocabulary.forEach((word) => {
-        if (wordsMatch(fragment, word)) possibleTranslations.push(word);
+        if (wordsMatch(fragment, word)) fittingWords.push(word);
       });
 
-      if (possibleTranslations.length === 1) {
-        translation = translation.replace(fragment, possibleTranslations[0]);
-        vocabulary = vocabulary.filter(
-          (word) => word !== possibleTranslations[0]
-        );
+      if (fittingWords.length === 1) {
+        translation = translation.replace(fragment, fittingWords[0]);
+
+        vocabulary = vocabulary.filter((word) => word !== fittingWords[0]);
       }
 
-      console.log(translation);
-      possibleTranslations = [];
+      fittingWords = [];
     }
   }
 
-  //   console.log(translation);
   return translation;
 }
 
@@ -46,6 +42,3 @@ function wordsMatch(word1: string, word2: string): boolean {
 
   return true;
 }
-
-// translate("a**? *c*. **e,", ["ace", "acd", "abd"]);
-// translate("***! **ll? f*l*. he*l, fe*l? c*ll. ***t,", ["mel","dell","felt","fill","fell","hell","cell"]);
