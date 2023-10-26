@@ -4,12 +4,11 @@ export function translate(speech: string, vocabulary: string[]): string {
   // if the word from speech possibly fits more than 1 words from vocabulary
   // skip it (for now)
 
-  let speechFragments = speech.split(/([\s?!,.])/);
-
-  const translation: string[] = [];
+  let translation = speech;
   let possibleTranslations: string[] = [];
 
-  while (speechFragments.join("").includes("*")) {
+  while (translation.includes("*")) {
+    let speechFragments = translation.split(/([\s?!,.])/);
     // console.log(speechFragments);
 
     for (let fragment of speechFragments) {
@@ -21,19 +20,19 @@ export function translate(speech: string, vocabulary: string[]): string {
       });
 
       if (possibleTranslations.length === 1) {
-        speechFragments = speechFragments.map((element) =>
-          element.replace(fragment, possibleTranslations[0])
-        );
+        translation = translation.replace(fragment, possibleTranslations[0]);
         vocabulary = vocabulary.filter(
           (word) => word !== possibleTranslations[0]
         );
       }
 
+      console.log(translation);
       possibleTranslations = [];
     }
   }
 
-  return speechFragments.join("");
+  //   console.log(translation);
+  return translation;
 }
 
 //
@@ -48,4 +47,5 @@ function wordsMatch(word1: string, word2: string): boolean {
   return true;
 }
 
-translate("a**? *c*. **e,", ["ace", "acd", "abd"]);
+// translate("a**? *c*. **e,", ["ace", "acd", "abd"]);
+// translate("***! **ll? f*l*. he*l, fe*l? c*ll. ***t,", ["mel","dell","felt","fill","fell","hell","cell"]);
