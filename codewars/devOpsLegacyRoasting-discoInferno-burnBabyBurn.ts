@@ -1,16 +1,15 @@
 export function roastLegacy(workloads: string): string {
-  // create a map for the points to earn for a legacy burn
   // create a list with all complaints
-  // for each complain, check if it is in the input string
-  // if the input string contains a complain (or '!'), increase a complains counter by 1
-  // for each legacy, check if it is in the input string
-  // if the input string contains a legacy, increase another counter by the points earned
-  // if there is no complain and no roasting, return 'These guys...'
-  // else 'Burn baby burn...'
+  // create a map for the points to earn for a legacy burn
+  // for each complain, check how often it occurs in the input string
+  /// increase a complaints counter by the number of times it is found
+  // for each legacy, check how often it occurs in the input string
+  /// multiply the corresponding points by the number of occurrences
+  /// increase a points counter by the points earned
+  // if there's been a complaint or a roasting, return 'Burn baby burn...' with the results of the counters
+  // else return 'These guys...'
 
-  console.log(workloads);
-
-  const complaints = [
+  const complaints: string[] = [
     "slow!",
     "expensive!",
     "manual!",
@@ -32,30 +31,22 @@ export function roastLegacy(workloads: string): string {
   };
 
   let complaintsCount = 0;
-  let burnedLegacyPoints = 0;
+  let burnedLegaciesPoints = 0;
 
   complaints.forEach((complaint) => {
-    const regex = new RegExp(complaint, "gi");
+    const complaintRegex = new RegExp(complaint, "gi");
 
-    complaintsCount += workloads.match(regex)?.length || 0;
+    complaintsCount += workloads.match(complaintRegex)?.length || 0;
   });
 
   for (let legacy in legacies) {
-    const regex = new RegExp(legacy, "gi");
+    const legacyRegex = new RegExp(legacy, "gi");
 
-    burnedLegacyPoints +=
-      legacies[legacy] * (workloads.match(regex)?.length || 0);
+    burnedLegaciesPoints +=
+      legacies[legacy] * (workloads.match(legacyRegex)?.length || 0);
   }
 
-  console.log(burnedLegacyPoints, complaintsCount);
-
-  //   if (!complaintsCount && !burnedLegacyPoints) {
-  // return "These guys are already DevOps and in the Cloud and the business is happy!";
-  //   }
-
-  //   return `Burn baby burn disco inferno ${burnedLegacyPoints} points earned in this roasting and ${complaintsCount} complaints resolved!`;
-
-  return complaintsCount || burnedLegacyPoints
-    ? `Burn baby burn disco inferno ${burnedLegacyPoints} points earned in this roasting and ${complaintsCount} complaints resolved!`
+  return complaintsCount || burnedLegaciesPoints
+    ? `Burn baby burn disco inferno ${burnedLegaciesPoints} points earned in this roasting and ${complaintsCount} complaints resolved!`
     : "These guys are already DevOps and in the Cloud and the business is happy!";
 }
