@@ -31,7 +31,8 @@ export function table(results: string[]): string {
   // { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
   pimpedResults.forEach((result) => {
     if (result) {
-      const output = Object.keys(result).map((team, i) => {
+      //   const output = Object.keys(result).map((team, i) => {
+      const [homeTeam, awayTeam] = Object.keys(result).map((team, i) => {
         const blub = new TeamTableData(team);
         const opponentIndex = i === 0 ? 1 : 0;
         const opponent = Object.keys(result)[opponentIndex];
@@ -43,22 +44,22 @@ export function table(results: string[]): string {
       });
       //   console.log(output);
       //
-      if (output[0].goalsScored > output[1].goalsScored) {
-        output[0].won++;
-        output[0].points += 3;
-        output[1].lost++;
-      } else if (output[0].goalsScored < output[1].goalsScored) {
-        output[1].won++;
-        output[1].points += 3;
-        output[0].lost++;
+      if (homeTeam.goalsScored > awayTeam.goalsScored) {
+        homeTeam.won++;
+        homeTeam.points += 3;
+        awayTeam.lost++;
+      } else if (homeTeam.goalsScored < awayTeam.goalsScored) {
+        awayTeam.won++;
+        awayTeam.points += 3;
+        homeTeam.lost++;
       } else {
-        output[0].tie++;
-        output[1].tie++;
-        output[0].points++;
-        output[1].points++;
+        homeTeam.tie++;
+        awayTeam.tie++;
+        homeTeam.points++;
+        awayTeam.points++;
       }
 
-      console.log(output);
+      console.log(homeTeam, awayTeam);
     }
     // const [homeTeam, awayTeam] = Object.keys(result);
   });
