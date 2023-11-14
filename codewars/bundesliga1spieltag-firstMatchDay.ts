@@ -28,18 +28,13 @@ export function table(results: string[]): string {
   const pimpedResults = results.map((result) => {
     return convertStrResultToObj(result);
   });
-  // .filter((result) => result); // remove results for not played matches
-  // console.log(pimpedResults);
 
   const table = [];
   let calculatedTableData: ITableData[] = [];
-  //// result: ['FC Bayern Muenchen', 6, 'Werder Bremen', 0]
   // { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
   pimpedResults.forEach((result) => {
     if (result) {
-      //   const output = Object.keys(result).map((team, i) => {
       const [homeTeam, awayTeam] = Object.keys(result).map((team, i) => {
-        // const blub = new TeamTableData(team);
         const blub = new (TeamTableData as any)(team); // TS for 'new TeamTableData(team)'
         const opponentIndex = i === 0 ? 1 : 0;
         const opponent = Object.keys(result)[opponentIndex];
@@ -50,8 +45,7 @@ export function table(results: string[]): string {
         blub.goalsDiff = blub.goalsScored - blub.goalsReceived;
         return blub; // [{team: 'FCB', ...},{}]
       });
-      //   console.log(output);
-      //
+
       if (homeTeam.goalsScored > awayTeam.goalsScored) {
         homeTeam.won++;
         homeTeam.points += 3;
@@ -68,10 +62,7 @@ export function table(results: string[]): string {
       }
 
       calculatedTableData = [...calculatedTableData, homeTeam, awayTeam];
-
-      // console.log(homeTeam, awayTeam);
     }
-    // const [homeTeam, awayTeam] = Object.keys(result);
   });
   // console.log(calculatedTableData);
 
@@ -81,15 +72,12 @@ export function table(results: string[]): string {
     else if (a.goalsDiff !== b.goalsDiff) return b.goalsDiff - a.goalsDiff;
     else if (a.goalsScored !== b.goalsScored)
       return b.goalsScored - a.goalsScored;
-    // else return a.team > b.team;
-    // else return a.team - b.team;
     else return a.team.localeCompare(b.team);
   });
 
   // console.log(calculatedTableData);
 
-  //! calculate position number
-  //
+  // calculate position number
   function calcTablePosition(
     arr: ITableData[],
     index: number,
@@ -144,8 +132,6 @@ export function table(results: string[]): string {
       )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}`;
     })
     .join("\n");
-
-  // return "";
 }
 
 // table([
