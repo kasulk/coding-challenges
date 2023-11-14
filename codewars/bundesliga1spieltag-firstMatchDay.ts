@@ -1,16 +1,17 @@
+interface ITableData {
+  team: string;
+  numMatches: number;
+  won: number;
+  tie: number;
+  lost: number;
+  goalsScored: number;
+  goalsReceived: number;
+  goalsDiff: number;
+  points: number;
+}
+
 export function table(results: string[]): string {
   //
-  interface ITableData {
-    team: string;
-    numMatches: number;
-    won: number;
-    tie: number;
-    lost: number;
-    goalsScored: number;
-    goalsReceived: number;
-    goalsDiff: number;
-    points: number;
-  }
   //
 
   function TeamTableData(this: ITableData, team: string) {
@@ -26,63 +27,46 @@ export function table(results: string[]): string {
   }
 
   const pimpedResults = results.map((result) => {
-    return convertStrResultToObj(result);
+    return convertSingleStrResultToObj(result);
   });
-
-  // console.log(pimpedResults);
 
   // const table = [];
   let calculatedTableData: ITableData[] = [];
   // result --> { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
-  pimpedResults.forEach(
-    (result) => {
-      // if (result) {
-      const [homeTeam, awayTeam] = Object.keys(result).map((team, i) => {
-        const blub = new (TeamTableData as any)(team); // TS for 'new TeamTableData(team)'
-        const opponentIndex = i === 0 ? 1 : 0;
-        const opponent = Object.keys(result)[opponentIndex];
+  pimpedResults.forEach((result) => {
+    const [homeTeam, awayTeam] = Object.keys(result).map((team, i) => {
+      const blub = new (TeamTableData as any)(team); // TS for 'new TeamTableData(team)'
+      const opponentIndex = i === 0 ? 1 : 0;
+      const opponent = Object.keys(result)[opponentIndex];
 
-        // console.log("result[team]", result[team], typeof result[team]);
-        // console.log(blub); //! top
-
-        if (!isNaN(result[team])) {
-          // if (typeof result[team] === "number") {
-          blub.numMatches++;
-          blub.goalsScored += result[team];
-          blub.goalsReceived += result[opponent];
-          blub.goalsDiff = blub.goalsScored - blub.goalsReceived;
-          // console.log(blub); //? top
-          // return blub; // [{team: 'FCB', ...},{}]
-        }
-        return blub; // [{team: 'FCB', ...},{}]
-      });
-
-      // console.log("homeTeam:", homeTeam);
-
-      // if (homeTeam.goalsScored) {
-      if (homeTeam.numMatches) {
-        // if (homeTeam) {
-        if (homeTeam.goalsScored > awayTeam.goalsScored) {
-          homeTeam.won++;
-          homeTeam.points += 3;
-          awayTeam.lost++;
-        } else if (homeTeam.goalsScored < awayTeam.goalsScored) {
-          awayTeam.won++;
-          awayTeam.points += 3;
-          homeTeam.lost++;
-        } else {
-          homeTeam.tie++;
-          awayTeam.tie++;
-          homeTeam.points++;
-          awayTeam.points++;
-        }
+      if (!isNaN(result[team])) {
+        blub.numMatches++;
+        blub.goalsScored += result[team];
+        blub.goalsReceived += result[opponent];
+        blub.goalsDiff = blub.goalsScored - blub.goalsReceived;
       }
+      return blub; // [{team: 'FCB', ...},{}]
+    });
 
-      calculatedTableData = [...calculatedTableData, homeTeam, awayTeam];
+    if (homeTeam.numMatches) {
+      if (homeTeam.goalsScored > awayTeam.goalsScored) {
+        homeTeam.won++;
+        homeTeam.points += 3;
+        awayTeam.lost++;
+      } else if (homeTeam.goalsScored < awayTeam.goalsScored) {
+        awayTeam.won++;
+        awayTeam.points += 3;
+        homeTeam.lost++;
+      } else {
+        homeTeam.tie++;
+        awayTeam.tie++;
+        homeTeam.points++;
+        awayTeam.points++;
+      }
     }
-    // }
-  );
-  // console.log(calculatedTableData);
+
+    calculatedTableData = [...calculatedTableData, homeTeam, awayTeam];
+  });
 
   // sort table data
   calculatedTableData.sort((a, b) => {
@@ -93,13 +77,10 @@ export function table(results: string[]): string {
     else return a.team.localeCompare(b.team);
   });
 
-  // console.log(calculatedTableData);
-
   let pos = 1;
 
   // calculate position number
   function calcTablePosition(
-    team: string, //debug
     arr: ITableData[],
     i: number,
     points: number,
@@ -110,25 +91,17 @@ export function table(results: string[]): string {
 
     if (prevRow) {
       if (prevRow.points === points) {
-        // console.log(team, "same points as", prevRow.team);
         if (prevRow.goalsDiff === goalsDiff) {
-          // console.log(team, "same goalDiff as", prevRow.team);
           if (prevRow.goalsScored === goalsScored) {
-            // console.log(team, "same goalsScored as", prevRow.team);
-            // return i.toString();
             return pos.toString();
           }
         }
       }
     }
     pos = i + 1;
-    // console.log("kuckuck!");
 
-    // return (i + 1).toString();
     return pos.toString();
   }
-
-  // console.log(calculatedTableData); //? all inside?
 
   // render table
   return calculatedTableData
@@ -145,10 +118,7 @@ export function table(results: string[]): string {
         points,
       } = row;
 
-      // console.log("row", row);
-
       const position = calcTablePosition(
-        team, // debug
         arr,
         i,
         points,
@@ -156,14 +126,12 @@ export function table(results: string[]): string {
         goalsDiff
       );
 
-      console.log(
-        `${position.padStart(2, " ")}. ${team.padEnd(
-          30,
-          " "
-        )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}`
-        // })
-        // .join("\n")
-      );
+      // console.log(
+      //   `${position.padStart(2, " ")}. ${team.padEnd(
+      //     30,
+      //     " "
+      //   )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}`
+      // );
 
       return `${position.padStart(2, " ")}. ${team.padEnd(
         30,
@@ -188,25 +156,14 @@ export function table(results: string[]): string {
 /**
  *
  * @param {string} result e.g. '6:0 FC Bayern Muenchen - Werder Bremen'
- /////* @returns {object} e.g. { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
+ * @returns {Object} e.g. { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
  */
-function convertStrResultToObj(result: string) {
-  // if (result[0] === "-") return null; // match not played
-  //   interface IResultObj {
-  //     homeTeam?: number;
-  //     awayTeam?: number;
-  //   }
-
-  // const resultObj: IResultObj = {};
+function convertSingleStrResultToObj(result: string): {
+  [key: string]: number;
+} {
   const [score, ...rest] = result.split(" ");
   const [homeTeam, awayTeam] = rest.join(" ").split(" - ");
   const scores = score.split(":").map(Number);
 
-  // resultObj[homeTeam] = scores[0];
-  // resultObj[awayTeam] = scores[1];
-
-  //   return [homeTeam, scores[0], awayTeam, scores[1]];
   return { [homeTeam]: scores[0], [awayTeam]: scores[1] };
-
-  // return resultObj;
 }
