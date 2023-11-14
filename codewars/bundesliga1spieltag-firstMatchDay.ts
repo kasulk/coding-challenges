@@ -29,41 +29,58 @@ export function table(results: string[]): string {
     return convertStrResultToObj(result);
   });
 
-  const table = [];
+  // console.log(pimpedResults);
+
+  // const table = [];
   let calculatedTableData: ITableData[] = [];
-  // { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
-  pimpedResults.forEach((result) => {
-    if (result) {
+  // result --> { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
+  pimpedResults.forEach(
+    (result) => {
+      // if (result) {
       const [homeTeam, awayTeam] = Object.keys(result).map((team, i) => {
         const blub = new (TeamTableData as any)(team); // TS for 'new TeamTableData(team)'
         const opponentIndex = i === 0 ? 1 : 0;
         const opponent = Object.keys(result)[opponentIndex];
 
-        blub.numMatches++;
-        blub.goalsScored += result[team];
-        blub.goalsReceived += result[opponent];
-        blub.goalsDiff = blub.goalsScored - blub.goalsReceived;
+        // console.log("result[team]", result[team], typeof result[team]);
+        // console.log(blub); //! top
+
+        if (!isNaN(result[team])) {
+          // if (typeof result[team] === "number") {
+          blub.numMatches++;
+          blub.goalsScored += result[team];
+          blub.goalsReceived += result[opponent];
+          blub.goalsDiff = blub.goalsScored - blub.goalsReceived;
+          console.log(blub); //? top
+          // return blub; // [{team: 'FCB', ...},{}]
+        }
         return blub; // [{team: 'FCB', ...},{}]
       });
 
-      if (homeTeam.goalsScored > awayTeam.goalsScored) {
-        homeTeam.won++;
-        homeTeam.points += 3;
-        awayTeam.lost++;
-      } else if (homeTeam.goalsScored < awayTeam.goalsScored) {
-        awayTeam.won++;
-        awayTeam.points += 3;
-        homeTeam.lost++;
-      } else {
-        homeTeam.tie++;
-        awayTeam.tie++;
-        homeTeam.points++;
-        awayTeam.points++;
+      // if (homeTeam.goalsScored) {
+      if (!isNaN(homeTeam)) {
+        // if (homeTeam) {
+        //? if kann weg?
+        if (homeTeam.goalsScored > awayTeam.goalsScored) {
+          homeTeam.won++;
+          homeTeam.points += 3;
+          awayTeam.lost++;
+        } else if (homeTeam.goalsScored < awayTeam.goalsScored) {
+          awayTeam.won++;
+          awayTeam.points += 3;
+          homeTeam.lost++;
+        } else {
+          homeTeam.tie++;
+          awayTeam.tie++;
+          homeTeam.points++;
+          awayTeam.points++;
+        }
       }
 
       calculatedTableData = [...calculatedTableData, homeTeam, awayTeam];
     }
-  });
+    // }
+  );
   // console.log(calculatedTableData);
 
   // sort table data
@@ -121,7 +138,7 @@ export function table(results: string[]): string {
         `${position.padStart(2, " ")}. ${team.padEnd(
           30,
           " "
-        )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}\n`
+        )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}`
         // })
         // .join("\n")
       );
@@ -152,7 +169,7 @@ export function table(results: string[]): string {
  /////* @returns {object} e.g. { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
  */
 function convertStrResultToObj(result: string) {
-  if (result[0] === "-") return null; // match not played
+  // if (result[0] === "-") return null; // match not played
   //   interface IResultObj {
   //     homeTeam?: number;
   //     awayTeam?: number;
