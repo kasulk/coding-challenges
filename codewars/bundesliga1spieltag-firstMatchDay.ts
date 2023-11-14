@@ -95,22 +95,40 @@ export function table(results: string[]): string {
 
   // console.log(calculatedTableData);
 
+  let pos = 1;
+
   // calculate position number
   function calcTablePosition(
+    team: string, //debug
     arr: ITableData[],
-    index: number,
+    i: number,
     points: number,
     goalsScored: number,
     goalsDiff: number
   ): string {
-    const prevRow = arr[index - 1];
+    const prevRow = arr[i - 1];
 
-    if (prevRow)
-      if (prevRow.points === points)
-        if (prevRow.goalsDiff === goalsDiff)
-          if (prevRow.goalsScored === goalsScored) return index.toString();
-    return (index + 1).toString();
+    if (prevRow) {
+      if (prevRow.points === points) {
+        // console.log(team, "same points as", prevRow.team);
+        if (prevRow.goalsDiff === goalsDiff) {
+          // console.log(team, "same goalDiff as", prevRow.team);
+          if (prevRow.goalsScored === goalsScored) {
+            // console.log(team, "same goalsScored as", prevRow.team);
+            // return i.toString();
+            return pos.toString();
+          }
+        }
+      }
+    }
+    pos = i + 1;
+    // console.log("kuckuck!");
+
+    // return (i + 1).toString();
+    return pos.toString();
   }
+
+  // console.log(calculatedTableData); //? all inside?
 
   // render table
   return calculatedTableData
@@ -127,7 +145,10 @@ export function table(results: string[]): string {
         points,
       } = row;
 
+      // console.log("row", row);
+
       const position = calcTablePosition(
+        team, // debug
         arr,
         i,
         points,
