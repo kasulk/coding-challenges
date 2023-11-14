@@ -68,14 +68,7 @@ export function table(results: string[]): string {
     calculatedTableData = [...calculatedTableData, homeTeam, awayTeam];
   });
 
-  // sort table data
-  calculatedTableData.sort((a, b) => {
-    if (a.points !== b.points) return b.points - a.points;
-    else if (a.goalsDiff !== b.goalsDiff) return b.goalsDiff - a.goalsDiff;
-    else if (a.goalsScored !== b.goalsScored)
-      return b.goalsScored - a.goalsScored;
-    else return a.team.localeCompare(b.team);
-  });
+  sortTableData(calculatedTableData);
 
   let pos = 1;
 
@@ -126,13 +119,6 @@ export function table(results: string[]): string {
         goalsDiff
       );
 
-      // console.log(
-      //   `${position.padStart(2, " ")}. ${team.padEnd(
-      //     30,
-      //     " "
-      //   )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}`
-      // );
-
       return `${position.padStart(2, " ")}. ${team.padEnd(
         30,
         " "
@@ -166,4 +152,15 @@ function convertSingleStrResultToObj(result: string): {
   const scores = score.split(":").map(Number);
 
   return { [homeTeam]: scores[0], [awayTeam]: scores[1] };
+}
+
+//
+function sortTableData(calculatedTableData: ITableData[]) {
+  calculatedTableData.sort((a, b) => {
+    if (a.points !== b.points) return b.points - a.points;
+    else if (a.goalsDiff !== b.goalsDiff) return b.goalsDiff - a.goalsDiff;
+    else if (a.goalsScored !== b.goalsScored)
+      return b.goalsScored - a.goalsScored;
+    else return a.team.localeCompare(b.team);
+  });
 }
