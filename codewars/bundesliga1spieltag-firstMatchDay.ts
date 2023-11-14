@@ -12,8 +12,6 @@ interface ITableData {
 
 export function table(results: string[]): string {
   //
-  //
-
   function TeamTableData(this: ITableData, team: string) {
     this.team = team;
     this.numMatches = 0;
@@ -70,32 +68,6 @@ export function table(results: string[]): string {
 
   sortTableData(calculatedTableData);
 
-  let pos = 1;
-
-  // calculate position number
-  function calcTablePosition(
-    arr: ITableData[],
-    i: number,
-    points: number,
-    goalsScored: number,
-    goalsDiff: number
-  ): string {
-    const prevRow = arr[i - 1];
-
-    if (prevRow) {
-      if (prevRow.points === points) {
-        if (prevRow.goalsDiff === goalsDiff) {
-          if (prevRow.goalsScored === goalsScored) {
-            return pos.toString();
-          }
-        }
-      }
-    }
-    pos = i + 1;
-
-    return pos.toString();
-  }
-
   // render table
   return calculatedTableData
     .map((row, i, arr) => {
@@ -111,12 +83,13 @@ export function table(results: string[]): string {
         points,
       } = row;
 
-      const position = calcTablePosition(
+      const position = calcRankNum(
         arr,
         i,
         points,
         goalsScored,
         goalsDiff
+        // rankNum
       );
 
       return `${position.padStart(2, " ")}. ${team.padEnd(
@@ -163,4 +136,30 @@ function sortTableData(calculatedTableData: ITableData[]) {
       return b.goalsScored - a.goalsScored;
     else return a.team.localeCompare(b.team);
   });
+}
+
+let rankNum = 1;
+//
+function calcRankNum(
+  arr: ITableData[],
+  i: number,
+  points: number,
+  goalsScored: number,
+  goalsDiff: number
+  // rankNum: number
+): string {
+  const prevRow = arr[i - 1];
+
+  if (prevRow) {
+    if (prevRow.points === points) {
+      if (prevRow.goalsDiff === goalsDiff) {
+        if (prevRow.goalsScored === goalsScored) {
+          return rankNum.toString();
+        }
+      }
+    }
+  }
+  rankNum = i + 1;
+
+  return rankNum.toString();
 }
