@@ -12,38 +12,25 @@ interface ITableData {
 
 export function table(results: string[]): string {
   //
-  function TeamTableData(this: ITableData, team: string) {
-    this.team = team;
-    this.numMatches = 0;
-    this.won = 0;
-    this.tie = 0;
-    this.lost = 0;
-    this.goalsScored = 0;
-    this.goalsReceived = 0;
-    this.goalsDiff = 0;
-    this.points = 0;
-  }
-
-  const pimpedResults = results.map((result) => {
+  const resultObjects = results.map((result) => {
     return convertSingleStrResultToObj(result);
   });
 
-  // const table = [];
   let calculatedTableData: ITableData[] = [];
-  // result --> { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
-  pimpedResults.forEach((result) => {
+
+  resultObjects.forEach((result) => {
     const [homeTeam, awayTeam] = Object.keys(result).map((team, i) => {
-      const blub = new (TeamTableData as any)(team); // TS for 'new TeamTableData(team)'
+      const teamData = new (TeamData as any)(team); // TS for 'new TeamData(team)'
       const opponentIndex = i === 0 ? 1 : 0;
       const opponent = Object.keys(result)[opponentIndex];
 
       if (!isNaN(result[team])) {
-        blub.numMatches++;
-        blub.goalsScored += result[team];
-        blub.goalsReceived += result[opponent];
-        blub.goalsDiff = blub.goalsScored - blub.goalsReceived;
+        teamData.numMatches++;
+        teamData.goalsScored += result[team];
+        teamData.goalsReceived += result[opponent];
+        teamData.goalsDiff = teamData.goalsScored - teamData.goalsReceived;
       }
-      return blub; // [{team: 'FCB', ...},{}]
+      return teamData; // [{team: 'FCB', ...},{}]
     });
 
     if (homeTeam.numMatches) {
@@ -68,52 +55,25 @@ export function table(results: string[]): string {
 
   sortTableData(calculatedTableData);
 
-  // render table
-  return calculatedTableData
-    .map((row, i, arr) => {
-      const {
-        team,
-        numMatches,
-        won,
-        tie,
-        lost,
-        goalsScored,
-        goalsReceived,
-        goalsDiff,
-        points,
-      } = row;
-
-      const position = calcRankNum(
-        arr,
-        i,
-        points,
-        goalsScored,
-        goalsDiff
-        // rankNum
-      );
-
-      return `${position.padStart(2, " ")}. ${team.padEnd(
-        30,
-        " "
-      )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}`;
-    })
-    .join("\n");
+  return renderTable(calculatedTableData);
 }
 
-// table([
-//   "6:0 FC Bayern Muenchen - Werder Bremen",
-//   "-:- Eintracht Frankfurt - Schalke 04",
-//   "-:- FC Augsburg - VfL Wolfsburg",
-//   "-:- Hamburger SV - FC Ingolstadt",
-//   "1:1 1. FC Koeln - SV Darmstadt",
-//   "-:- Borussia Dortmund - FSV Mainz 05",
-//   "2:3 Borussia Moenchengladbach - Bayer Leverkusen",
-//   "-:- Hertha BSC Berlin - SC Freiburg",
-//   "-:- TSG 1899 Hoffenheim - RasenBall Leipzig",
-// ]);
+//
+function TeamData(this: ITableData, team: string) {
+  this.team = team;
+  this.numMatches = 0;
+  this.won = 0;
+  this.tie = 0;
+  this.lost = 0;
+  this.goalsScored = 0;
+  this.goalsReceived = 0;
+  this.goalsDiff = 0;
+  this.points = 0;
+}
 
 /**
- *
+ * Converts element of input array into object
+ * with team names as keys and scores as values
  * @param {string} result e.g. '6:0 FC Bayern Muenchen - Werder Bremen'
  * @returns {Object} e.g. { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
  */
@@ -162,4 +122,38 @@ function calcRankNum(
   rankNum = i + 1;
 
   return rankNum.toString();
+}
+
+//
+function renderTable(calculatedTableData: ITableData[]) {
+  //
+  return calculatedTableData
+    .map((row, i, arr) => {
+      const {
+        team,
+        numMatches,
+        won,
+        tie,
+        lost,
+        goalsScored,
+        goalsReceived,
+        goalsDiff,
+        points,
+      } = row;
+
+      const position = calcRankNum(
+        arr,
+        i,
+        points,
+        goalsScored,
+        goalsDiff
+        // rankNum
+      );
+
+      return `${position.padStart(2, " ")}. ${team.padEnd(
+        30,
+        " "
+      )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}`;
+    })
+    .join("\n");
 }
