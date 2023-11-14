@@ -51,16 +51,17 @@ export function table(results: string[]): string {
           blub.goalsScored += result[team];
           blub.goalsReceived += result[opponent];
           blub.goalsDiff = blub.goalsScored - blub.goalsReceived;
-          console.log(blub); //? top
+          // console.log(blub); //? top
           // return blub; // [{team: 'FCB', ...},{}]
         }
         return blub; // [{team: 'FCB', ...},{}]
       });
 
+      // console.log("homeTeam:", homeTeam);
+
       // if (homeTeam.goalsScored) {
-      if (!isNaN(homeTeam)) {
+      if (homeTeam.numMatches) {
         // if (homeTeam) {
-        //? if kann weg?
         if (homeTeam.goalsScored > awayTeam.goalsScored) {
           homeTeam.won++;
           homeTeam.points += 3;
