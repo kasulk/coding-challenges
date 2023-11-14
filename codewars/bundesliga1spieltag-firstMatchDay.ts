@@ -3,6 +3,17 @@ export function table(results: string[]): string {
   // team name, goals, wins, ties, losses and points
   // split the lines of the input array into arrays of values
 
+  interface ITableData {
+    team: string;
+    numMatches: number;
+    won: number;
+    tie: number;
+    lost: number;
+    goalsScored: number;
+    goalsReceived: number;
+    goalsDiff: number;
+    points: number;
+  }
   //
 
   //   console.log(results);
@@ -14,9 +25,9 @@ export function table(results: string[]): string {
     this.won = 0;
     this.tie = 0;
     this.lost = 0;
-    // this.goalsDiff = "0:0";
     this.goalsScored = 0;
     this.goalsReceived = 0;
+    this.goalsDiff = 0;
     this.points = 0;
   }
 
@@ -27,6 +38,7 @@ export function table(results: string[]): string {
   console.log(pimpedResults);
 
   const table = [];
+  let calculatedTableData: ITableData[] = [];
   //// result: ['FC Bayern Muenchen', 6, 'Werder Bremen', 0]
   // { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
   pimpedResults.forEach((result) => {
@@ -40,6 +52,7 @@ export function table(results: string[]): string {
         blub.numMatches++;
         blub.goalsScored += result[team];
         blub.goalsReceived += result[opponent];
+        blub.goalsDiff = blub.goalsScored - blub.goalsReceived;
         return blub; // [{team: 'FCB', ...},{}]
       });
       //   console.log(output);
@@ -59,12 +72,48 @@ export function table(results: string[]): string {
         awayTeam.points++;
       }
 
-      console.log(homeTeam, awayTeam);
+      calculatedTableData = [...calculatedTableData, homeTeam, awayTeam];
+
+      // console.log(homeTeam, awayTeam);
     }
     // const [homeTeam, awayTeam] = Object.keys(result);
   });
+  // console.log(calculatedTableData);
 
-  return "";
+  //! sort table data
+  calculatedTableData.sort((a, b) => {
+    if (a.points !== b.points) return b.points - a.points;
+    else if (a.goalsDiff !== b.goalsDiff) return b.goalsDiff - a.goalsDiff;
+    else if (a.goalsScored !== b.goalsScored)
+      return b.goalsScored - a.goalsScored;
+    // else return a.team > b.team;
+    // else return a.team - b.team;
+    else return a.team.localeCompare(b.team);
+  });
+
+  console.log(calculatedTableData);
+
+  //! render table
+  return calculatedTableData
+    .map((row) => {
+      const {
+        team,
+        numMatches,
+        won,
+        tie,
+        lost,
+        goalsScored,
+        goalsReceived,
+        points,
+      } = row;
+      return ` . ${team.padEnd(
+        30,
+        " "
+      )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}`;
+    })
+    .join("\n");
+
+  // return "";
 }
 
 table([
