@@ -1,19 +1,3 @@
-interface ITableData {
-  team: string;
-  numMatches: number;
-  won: number;
-  tie: number;
-  lost: number;
-  goalsScored: number;
-  goalsReceived: number;
-  goalsDiff: number;
-  points: number;
-}
-
-interface IResult {
-  [key: string]: number;
-}
-
 export function table(results: string[]): string {
   let calculatedTableData: ITableData[] = [];
 
@@ -26,7 +10,7 @@ export function table(results: string[]): string {
       const teamData = createTeamDataObj(team);
       const opponent = getOpponent(result, i);
 
-      // only add data for matches that have results already
+      // only add data for matches that have results
       if (!isNaN(result[team])) {
         calcAndAddGeneralTeamData(team, teamData, opponent, result);
       }
@@ -46,28 +30,26 @@ export function table(results: string[]): string {
   return renderTable(calculatedTableData);
 }
 
+/**
+ *  HELPERS
+ */
+
 //
-function createTeamDataObj(team: string) {
-  return new (TeamData as any)(team); // TS for 'new TeamData(team)'
+interface ITableData {
+  team: string;
+  numMatches: number;
+  won: number;
+  tie: number;
+  lost: number;
+  goalsScored: number;
+  goalsReceived: number;
+  goalsDiff: number;
+  points: number;
 }
 
 //
-function getOpponent(result: IResult, i: number) {
-  const opponentIndex = i === 0 ? 1 : 0;
-  return Object.keys(result)[opponentIndex];
-}
-
-//
-function calcAndAddGeneralTeamData(
-  team: string,
-  teamData: any,
-  opponent: string,
-  result: IResult
-): any {
-  teamData.numMatches++;
-  teamData.goalsScored += result[team];
-  teamData.goalsReceived += result[opponent];
-  teamData.goalsDiff = teamData.goalsScored - teamData.goalsReceived;
+interface IResult {
+  [teamName: string]: number;
 }
 
 //
@@ -81,6 +63,30 @@ function TeamData(this: ITableData, team: string) {
   this.goalsReceived = 0;
   this.goalsDiff = 0;
   this.points = 0;
+}
+
+//
+function createTeamDataObj(team: string): any {
+  return new (TeamData as any)(team); // TS for 'new TeamData(team)'
+}
+
+//
+function getOpponent(result: IResult, i: number): string {
+  const opponentIndex = i === 0 ? 1 : 0;
+  return Object.keys(result)[opponentIndex];
+}
+
+//
+function calcAndAddGeneralTeamData(
+  team: string,
+  teamData: any,
+  opponent: string,
+  result: IResult
+): void {
+  teamData.numMatches++;
+  teamData.goalsScored += result[team];
+  teamData.goalsReceived += result[opponent];
+  teamData.goalsDiff = teamData.goalsScored - teamData.goalsReceived;
 }
 
 /**
@@ -119,7 +125,7 @@ function calcAndAddWonTieLostAndPointsToBothTeams(
 }
 
 //
-function sortTableData(calculatedTableData: ITableData[]) {
+function sortTableData(calculatedTableData: ITableData[]): void {
   calculatedTableData.sort((a, b) => {
     if (a.points !== b.points) return b.points - a.points;
     else if (a.goalsDiff !== b.goalsDiff) return b.goalsDiff - a.goalsDiff;
@@ -156,7 +162,7 @@ function calcRankNum(
 }
 
 //
-function renderTable(calculatedTableData: ITableData[]) {
+function renderTable(calculatedTableData: ITableData[]): string {
   //
   return calculatedTableData
     .map((row, i, arr) => {
