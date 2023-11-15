@@ -25,6 +25,7 @@ export function table(results: string[]): string {
       const opponent = Object.keys(result)[opponentIndex];
 
       if (!isNaN(result[team])) {
+        // calcAndAddGeneralTeamData()
         teamData.numMatches++;
         teamData.goalsScored += result[team];
         teamData.goalsReceived += result[opponent];
@@ -34,20 +35,7 @@ export function table(results: string[]): string {
     });
 
     if (homeTeam.numMatches) {
-      if (homeTeam.goalsScored > awayTeam.goalsScored) {
-        homeTeam.won++;
-        homeTeam.points += 3;
-        awayTeam.lost++;
-      } else if (homeTeam.goalsScored < awayTeam.goalsScored) {
-        awayTeam.won++;
-        awayTeam.points += 3;
-        homeTeam.lost++;
-      } else {
-        homeTeam.tie++;
-        awayTeam.tie++;
-        homeTeam.points++;
-        awayTeam.points++;
-      }
+      calcAndAddWonTieLostAndPoints(homeTeam, awayTeam);
     }
 
     calculatedTableData = [...calculatedTableData, homeTeam, awayTeam];
@@ -85,6 +73,24 @@ function convertSingleStrResultToObj(result: string): {
   const scores = score.split(":").map(Number);
 
   return { [homeTeam]: scores[0], [awayTeam]: scores[1] };
+}
+
+//
+function calcAndAddWonTieLostAndPoints(homeTeam: any, awayTeam: any): void {
+  if (homeTeam.goalsScored > awayTeam.goalsScored) {
+    homeTeam.won++;
+    homeTeam.points += 3;
+    awayTeam.lost++;
+  } else if (homeTeam.goalsScored < awayTeam.goalsScored) {
+    awayTeam.won++;
+    awayTeam.points += 3;
+    homeTeam.lost++;
+  } else {
+    homeTeam.tie++;
+    awayTeam.tie++;
+    homeTeam.points++;
+    awayTeam.points++;
+  }
 }
 
 //
@@ -141,7 +147,7 @@ function renderTable(calculatedTableData: ITableData[]) {
         points,
       } = row;
 
-      const position = calcRankNum(
+      const rank = calcRankNum(
         arr,
         i,
         points,
@@ -150,7 +156,7 @@ function renderTable(calculatedTableData: ITableData[]) {
         // rankNum
       );
 
-      return `${position.padStart(2, " ")}. ${team.padEnd(
+      return `${rank.padStart(2, " ")}. ${team.padEnd(
         30,
         " "
       )}${numMatches}  ${won}  ${tie}  ${lost}  ${goalsScored}:${goalsReceived}  ${points}`;
