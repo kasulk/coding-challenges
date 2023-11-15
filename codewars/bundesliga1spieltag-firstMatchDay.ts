@@ -18,7 +18,6 @@ function getOpponent(result: IResult, i: number) {
   return Object.keys(result)[opponentIndex];
 }
 function createTeamDataObj(team: string) {
-  // const teamData = new (TeamData as any)(team); // TS for 'new TeamData(team)'
   return new (TeamData as any)(team); // TS for 'new TeamData(team)'
 }
 function calcAndAddGeneralTeamData(
@@ -85,9 +84,6 @@ function TeamData(this: ITableData, team: string) {
  * @returns {Object} e.g. { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
  */
 function convertSingleStrResultToObj(result: string): IResult {
-  // {
-  // [key: string]: number;
-  // }
   const [score, ...rest] = result.split(" ");
   const [homeTeam, awayTeam] = rest.join(" ").split(" - ");
   const scores = score.split(":").map(Number);
