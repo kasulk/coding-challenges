@@ -9,27 +9,9 @@ interface ITableData {
   goalsDiff: number;
   points: number;
 }
+
 interface IResult {
   [key: string]: number;
-}
-
-function getOpponent(result: IResult, i: number) {
-  const opponentIndex = i === 0 ? 1 : 0;
-  return Object.keys(result)[opponentIndex];
-}
-function createTeamDataObj(team: string) {
-  return new (TeamData as any)(team); // TS for 'new TeamData(team)'
-}
-function calcAndAddGeneralTeamData(
-  team: string,
-  teamData: any,
-  opponent: string,
-  result: IResult
-): any {
-  teamData.numMatches++;
-  teamData.goalsScored += result[team];
-  teamData.goalsReceived += result[opponent];
-  teamData.goalsDiff = teamData.goalsScored - teamData.goalsReceived;
 }
 
 export function table(results: string[]): string {
@@ -62,6 +44,30 @@ export function table(results: string[]): string {
   sortTableData(calculatedTableData);
 
   return renderTable(calculatedTableData);
+}
+
+//
+function createTeamDataObj(team: string) {
+  return new (TeamData as any)(team); // TS for 'new TeamData(team)'
+}
+
+//
+function getOpponent(result: IResult, i: number) {
+  const opponentIndex = i === 0 ? 1 : 0;
+  return Object.keys(result)[opponentIndex];
+}
+
+//
+function calcAndAddGeneralTeamData(
+  team: string,
+  teamData: any,
+  opponent: string,
+  result: IResult
+): any {
+  teamData.numMatches++;
+  teamData.goalsScored += result[team];
+  teamData.goalsReceived += result[opponent];
+  teamData.goalsDiff = teamData.goalsScored - teamData.goalsReceived;
 }
 
 //
