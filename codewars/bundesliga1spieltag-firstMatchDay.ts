@@ -9,33 +9,52 @@ interface ITableData {
   goalsDiff: number;
   points: number;
 }
+interface IResult {
+  [key: string]: number;
+}
+
+function getOpponent(result: IResult, i: number) {
+  const opponentIndex = i === 0 ? 1 : 0;
+  return Object.keys(result)[opponentIndex];
+}
+function createTeamDataObj(team: string) {
+  // const teamData = new (TeamData as any)(team); // TS for 'new TeamData(team)'
+  return new (TeamData as any)(team); // TS for 'new TeamData(team)'
+}
+function calcAndAddGeneralTeamData(
+  team: string,
+  teamData: any,
+  opponent: string,
+  result: IResult
+): any {
+  teamData.numMatches++;
+  teamData.goalsScored += result[team];
+  teamData.goalsReceived += result[opponent];
+  teamData.goalsDiff = teamData.goalsScored - teamData.goalsReceived;
+}
 
 export function table(results: string[]): string {
-  //
+  let calculatedTableData: ITableData[] = [];
+
   const resultObjects = results.map((result) => {
     return convertSingleStrResultToObj(result);
   });
 
-  let calculatedTableData: ITableData[] = [];
-
   resultObjects.forEach((result) => {
     const [homeTeam, awayTeam] = Object.keys(result).map((team, i) => {
-      const teamData = new (TeamData as any)(team); // TS for 'new TeamData(team)'
-      const opponentIndex = i === 0 ? 1 : 0;
-      const opponent = Object.keys(result)[opponentIndex];
+      const teamData = createTeamDataObj(team);
+      const opponent = getOpponent(result, i);
 
+      // only add data for matches that have results already
       if (!isNaN(result[team])) {
-        // calcAndAddGeneralTeamData()
-        teamData.numMatches++;
-        teamData.goalsScored += result[team];
-        teamData.goalsReceived += result[opponent];
-        teamData.goalsDiff = teamData.goalsScored - teamData.goalsReceived;
+        calcAndAddGeneralTeamData(team, teamData, opponent, result);
       }
-      return teamData; // [{team: 'FCB', ...},{}]
+
+      return teamData;
     });
 
     if (homeTeam.numMatches) {
-      calcAndAddWonTieLostAndPoints(homeTeam, awayTeam);
+      calcAndAddWonTieLostAndPointsToBothTeams(homeTeam, awayTeam);
     }
 
     calculatedTableData = [...calculatedTableData, homeTeam, awayTeam];
@@ -65,9 +84,10 @@ function TeamData(this: ITableData, team: string) {
  * @param {string} result e.g. '6:0 FC Bayern Muenchen - Werder Bremen'
  * @returns {Object} e.g. { 'FC Bayern Muenchen': 6, 'Werder Bremen': 0 }
  */
-function convertSingleStrResultToObj(result: string): {
-  [key: string]: number;
-} {
+function convertSingleStrResultToObj(result: string): IResult {
+  // {
+  // [key: string]: number;
+  // }
   const [score, ...rest] = result.split(" ");
   const [homeTeam, awayTeam] = rest.join(" ").split(" - ");
   const scores = score.split(":").map(Number);
@@ -76,7 +96,10 @@ function convertSingleStrResultToObj(result: string): {
 }
 
 //
-function calcAndAddWonTieLostAndPoints(homeTeam: any, awayTeam: any): void {
+function calcAndAddWonTieLostAndPointsToBothTeams(
+  homeTeam: any,
+  awayTeam: any
+): void {
   if (homeTeam.goalsScored > awayTeam.goalsScored) {
     homeTeam.won++;
     homeTeam.points += 3;
