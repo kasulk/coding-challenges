@@ -1,35 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { ChangeEvent, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+/**
+  Challenge: 
+  Make button disabled when there is no character on the input field. 
+  Enable the `Submit` button (remove button from being disabled) 
+  when there is at least one character.
+**/
+export default function App() {
+  const [text, setText] = useState("");
+
+  function handleChange(event: ChangeEvent): void {
+    const input = event.target as HTMLTextAreaElement;
+    setText(input.value);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h3>Disable Button Challenge</h3>
+      <input type="text" onChange={handleChange} />
+      <button disabled={!text}>Submit</button>
     </>
-  )
+  );
 }
-
-export default App
