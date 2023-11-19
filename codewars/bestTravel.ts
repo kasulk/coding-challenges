@@ -3,15 +3,7 @@ export function chooseBestSum(
   maxTowns: number, // k
   distances: number[] // ls
 ): number | null {
-  // loop through each number
-  // 7: 1, 3, 6, 10
-  // 8: 1, 3, 6, 10, 15
-  // 8: 15, 10, 6, 3, 1
-  //
-  // take the first k-1 numbers and loop through the rest
-  // take num 1 and 3 and loop through the rest
-  // take num 1 and 4 and loop through the rest
-  // indeces
+  // indices
   // 1,2,3
   // 1,2,4
   // 1,2,5
@@ -23,7 +15,7 @@ export function chooseBestSum(
   /// 2,4,5
   /// 3,4,5
   //
-  //! finish with 3 loops
+  //! test first with 3 hardcoded loops
   console.log(maxDistance, maxTowns, distances);
 
   let choice: number[] = [];
@@ -31,30 +23,29 @@ export function chooseBestSum(
   const distanceSums: number[] = [];
 
   if (distances.length === 1) {
-    console.log(null);
+    // console.log(null);
+    // console.log("=====================");
     return null;
   }
 
   for (let i = 0; i < distances.length; i++) {
-    // for (let j = 1; j < distances.length; j++) {
     for (let j = i + 1; j < distances.length; j++) {
-      //   for (let k = 2; k < distances.length; k++) {
       for (let k = j + 1; k < distances.length; k++) {
-        //
-        // choice.push()
         choice = [distances[i], distances[j], distances[k]];
-        console.log("choice", choice);
+        // console.log("choice", choice);
         distance = choice.reduce((sum, dist) => sum + dist, 0);
         distanceSums.push(distance);
       }
-      console.log("---------------");
+      //   console.log("-");
     }
   }
-  console.log("distancesSums", distanceSums);
-  const bla = distanceSums.filter((distSum) => distSum <= maxDistance);
+  //   console.log("distancesSums", distanceSums);
+  const possibleDistances = distanceSums.filter(
+    (distSum) => distSum <= maxDistance
+  );
 
-  console.log(Math.max(...bla));
-  console.log("=====================");
+  //   console.log(Math.max(...possibleDistances));
+  //   console.log("=====================");
 
-  return Math.max(...bla);
+  return Math.max(...possibleDistances);
 }
