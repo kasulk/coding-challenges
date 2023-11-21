@@ -22,9 +22,9 @@ export const isPaired = (input: string): boolean => {
   const stack: string[] = [];
 
   for (let char of input) {
-    if (!/[\(\[\{\)\]\}]/.test(char)) continue;
+    if (!/[()[]{}]/.test(char)) continue;
 
-    if (/[\(\[\{]/.test(char)) {
+    if (/[([{]/.test(char)) {
       stack.push(char);
       continue;
     }
