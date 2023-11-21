@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+/** 
+  Challenge: 
+  Parent text (I need to be updated from my child) 
+  should be updated when Child button below is clicked. 
+  Feel free to use any string to update the parent's current string.
+**/
+interface IChildProps {
+  onButtonClick: (value: string) => void;
+}
 
-function App() {
-  const [count, setCount] = useState(0)
+export function Child({ onButtonClick }: IChildProps) {
+  return (
+    <>
+      <div>Child</div>
+      <button onClick={() => onButtonClick("I got updated!")}>
+        Change Parent Value
+      </button>
+    </>
+  );
+}
+
+export default function Parent() {
+  const [value, setValue] = useState("I need to be updated from my child");
+
+  function handleUpdate(newValue: string): void {
+    setValue(newValue);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h3>Update Parent State Challenge (Using Callback)</h3>
+      <div className="wrapper">
+        <div>Parent</div>
+        <div className="box-wrapper">{value}</div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
 
-export default App
+      <div className="wrapper">
+        <Child onButtonClick={handleUpdate} />
+      </div>
+    </>
+  );
+}
