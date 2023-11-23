@@ -1,11 +1,9 @@
 export class Clock {
-  private hours: number; //!
-  private minutes: number; //!
+  private hours: number;
+  private minutes: number;
 
-  private totalTimeInMinutes: number; //!
-
-  private clockHours: number; //!
-  private clockMinutes: number; //!
+  private clockHours: number;
+  private clockMinutes: number;
 
   constructor(hours = 0, minutes = 0) {
     this.hours = hours;
@@ -14,21 +12,21 @@ export class Clock {
   }
 
   private _calcTime(hours, minutes): void {
-    // convert the input hours into minutes and add the input minutes
-    this.totalTimeInMinutes = hours * 60 + minutes;
-    // divide the result by 60 to get the actual hours (before comma)
-    let totalHours = Math.trunc(this.totalTimeInMinutes / 60);
-    // apply modulo 60 to get the clock minutes
-    this.clockMinutes = this.totalTimeInMinutes % 60;
-    // if the mins are negative,
-    // subtract them from 60 and subtract 1 from the hours
+    // get the actual hours including minutes (before comma)
+    const totalTimeInMinutes = hours * 60 + minutes;
+    let totalHours = Math.trunc(totalTimeInMinutes / 60);
+
+    this.clockMinutes = totalTimeInMinutes % 60;
+
+    // handle negative minutes
     if (this.clockMinutes < 0) {
       this.clockMinutes += 60;
       totalHours--;
     }
-    // apply modulo 24 to the hours to get the hours on the clock
+
     this.clockHours = totalHours % 24;
-    // if the resulting hours is negative, subtract them from 24
+
+    // handle negative hours
     if (this.clockHours < 0) this.clockHours += 24;
   }
 
@@ -55,9 +53,6 @@ export class Clock {
     return this.plus(minutes);
   }
 
-  // Both clocks should be equal when the hours and the minutes are the same.
-  // Given are two clocks that are initialized with new Clock(15, 37). When the equals is called on the first one with the other as parameter the result should be true
-  //? clock1.equals(clock2)
   equals(otherClock): boolean {
     return (
       this.clockHours === otherClock.clockHours &&
@@ -65,17 +60,3 @@ export class Clock {
     );
   }
 }
-
-// let hrs = 1;
-// let mins = 15;
-// const bla = new Clock(hrs, mins);
-// console.log(bla);
-// console.log(bla.toString());
-// console.log(bla);
-
-// console.log(bla.plus(1));
-// console.log(bla.toString());
-
-// const blub = new Clock(1, 16);
-// console.log(blub);
-// bla.equals(blub);
