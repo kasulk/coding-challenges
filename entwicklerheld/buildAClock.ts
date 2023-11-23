@@ -55,17 +55,27 @@ export class Clock {
     return this.plus(minutes);
   }
 
-  equals(otherClock) {
-    throw new Error("Implement me");
+  // Both clocks should be equal when the hours and the minutes are the same.
+  // Given are two clocks that are initialized with new Clock(15, 37). When the equals is called on the first one with the other as parameter the result should be true
+  //? clock1.equals(clock2)
+  equals(otherClock): boolean {
+    return (
+      this.clockHours === otherClock.clockHours &&
+      this.clockMinutes === otherClock.clockMinutes
+    );
   }
 }
 
 // let hrs = 1;
 // let mins = 15;
-// const test = new Clock(hrs, mins);
-// console.log(test);
-// console.log(test.toString());
-// console.log(test);
+// const bla = new Clock(hrs, mins);
+// console.log(bla);
+// console.log(bla.toString());
+// console.log(bla);
 
-// console.log(test.plus(1));
-// console.log(test.toString());
+// console.log(bla.plus(1));
+// console.log(bla.toString());
+
+// const blub = new Clock(1, 16);
+// console.log(blub);
+// bla.equals(blub);
