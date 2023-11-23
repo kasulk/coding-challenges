@@ -2,6 +2,8 @@ export class Clock {
   private hours: number; //!
   private minutes: number; //!
 
+  private totalTimeInMinutes: number; //!
+
   private clockMinutes: number; //!
   private clockHours: number; //!
 
@@ -10,13 +12,13 @@ export class Clock {
     this.minutes = minutes;
   }
 
-  private _calcTime(): void {
+  private _calcTime(hours, minutes): void {
     // convert the input hours into minutes and add the input minutes
-    let totalTimeInMins = this.hours * 60 + this.minutes;
+    this.totalTimeInMinutes = hours * 60 + minutes;
     // divide the result by 60 to get the actual hours (before comma)
-    let totalHours = Math.trunc(totalTimeInMins / 60);
-    // apply modulo 60 to get the actual minutes
-    this.clockMinutes = totalTimeInMins % 60;
+    let totalHours = Math.trunc(this.totalTimeInMinutes / 60);
+    // apply modulo 60 to get the clock minutes
+    this.clockMinutes = this.totalTimeInMinutes % 60;
     // if the mins are negative,
     // subtract them from 60 and subtract 1 from the hours
     if (this.clockMinutes < 0) {
@@ -29,22 +31,43 @@ export class Clock {
     if (this.clockHours < 0) this.clockHours += 24;
   }
 
+  private _clockValueToString(value: number): string {
+    return value.toString().padStart(2, "0");
+  }
+
+  private _clockValuesToString(): string {
+    return `${this._clockValueToString(
+      this.clockHours
+    )}:${this._clockValueToString(this.clockMinutes)}`;
+  }
+
   toString(): string {
-    this._calcTime();
-    return `${this.clockHours.toString().padStart(2, "0")}:${this.clockMinutes
-      .toString()
-      .padStart(2, "0")}`;
+    this._calcTime(this.hours, this.minutes);
+    return this._clockValuesToString();
   }
 
-  plus(minutes) {
-    throw new Error("Implement me");
+  plus(minutes: number): string {
+    minutes += this.clockMinutes;
+    this._calcTime(this.clockHours, minutes);
+    return this._clockValuesToString();
   }
 
-  minus(minutes) {
-    throw new Error("Implement me");
+  minus(minutes: number): string {
+    minutes *= -1;
+    return this.plus(minutes);
   }
 
   equals(otherClock) {
     throw new Error("Implement me");
   }
 }
+
+let hrs = 1;
+let mins = 15;
+const test = new Clock(hrs, mins);
+console.log(test);
+console.log(test.toString());
+console.log(test);
+
+console.log(test.plus(1));
+console.log(test.toString());
