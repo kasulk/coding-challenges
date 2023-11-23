@@ -4,12 +4,13 @@ export class Clock {
 
   private totalTimeInMinutes: number; //!
 
-  private clockMinutes: number; //!
   private clockHours: number; //!
+  private clockMinutes: number; //!
 
   constructor(hours = 0, minutes = 0) {
     this.hours = hours;
     this.minutes = minutes;
+    this._calcTime(this.hours, this.minutes);
   }
 
   private _calcTime(hours, minutes): void {
@@ -35,21 +36,18 @@ export class Clock {
     return value.toString().padStart(2, "0");
   }
 
-  private _clockValuesToString(): string {
-    return `${this._clockValueToString(
-      this.clockHours
-    )}:${this._clockValueToString(this.clockMinutes)}`;
-  }
-
   toString(): string {
-    this._calcTime(this.hours, this.minutes);
-    return this._clockValuesToString();
+    return (
+      this._clockValueToString(this.clockHours) +
+      ":" +
+      this._clockValueToString(this.clockMinutes)
+    );
   }
 
   plus(minutes: number): string {
     minutes += this.clockMinutes;
     this._calcTime(this.clockHours, minutes);
-    return this._clockValuesToString();
+    return this.toString();
   }
 
   minus(minutes: number): string {
@@ -62,12 +60,12 @@ export class Clock {
   }
 }
 
-let hrs = 1;
-let mins = 15;
-const test = new Clock(hrs, mins);
-console.log(test);
-console.log(test.toString());
-console.log(test);
+// let hrs = 1;
+// let mins = 15;
+// const test = new Clock(hrs, mins);
+// console.log(test);
+// console.log(test.toString());
+// console.log(test);
 
-console.log(test.plus(1));
-console.log(test.toString());
+// console.log(test.plus(1));
+// console.log(test.toString());
