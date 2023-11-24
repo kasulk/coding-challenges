@@ -9,6 +9,7 @@ export function nextHappyYear(year: number): number {
     year++;
     const digits = [...year.toString()];
     const uniqueDigits = [...new Set(digits)];
+
     if (uniqueDigits.length === digits.length) break;
   }
 
