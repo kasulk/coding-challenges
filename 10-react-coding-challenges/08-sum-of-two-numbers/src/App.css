@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+div {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  margin-top: 1rem;
+}

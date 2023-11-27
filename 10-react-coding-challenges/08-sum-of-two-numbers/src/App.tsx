@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { ChangeEvent, useState } from "react";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+/** 
+  Challenge: 
+  Make this app work like a calculator that can add two numbers.
+  Functionality: 
+  When user place numbers on first and second input and hit the button. The sum should appear on the `Total: ` as an output. 
+  Bonus:
+  When user changes one of the inputs, calculate and update the sum value
+**/
+
+export default function App() {
+  const [number1, setNumber1] = useState("");
+  const [number2, setNumber2] = useState("");
+  const [total, setTotal] = useState(0);
+
+  function handleNumber1Change(event: ChangeEvent) {
+    const input = event.target as HTMLInputElement;
+    const newValue = input.value;
+    setNumber1(newValue);
+    setTotal(Number(newValue) + Number(number2));
+  }
+
+  function handleNumber2Change(event: ChangeEvent) {
+    const input = event.target as HTMLInputElement;
+    const newValue = input.value;
+    setNumber2(newValue);
+    setTotal(Number(newValue) + Number(number1));
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h2>Adding Two Numbers</h2>
+      <input
+        placeholder="First Number"
+        type="number"
+        onChange={handleNumber1Change}
+      />
+      <input
+        placeholder="Second Number"
+        type="number"
+        onChange={handleNumber2Change}
+      />
 
-export default App
+      {/* <button>Add Two Numbers</button> */}
+      <p>Total: {total}</p>
+    </div>
+  );
+}
