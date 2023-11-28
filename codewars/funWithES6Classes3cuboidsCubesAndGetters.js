@@ -6,10 +6,7 @@ class Cuboid {
   }
 
   get surfaceArea() {
-    const a = this.length;
-    const b = this.width;
-    const c = this.height;
-
+    const { length: a, width: b, height: c } = this;
     return 2 * (a * b + a * c + b * c);
   }
 
@@ -20,9 +17,6 @@ class Cuboid {
 
 class Cube extends Cuboid {
   constructor(length) {
-    super(length);
-    this.length = length;
-    this.width = length;
-    this.height = length;
+    super(length, length, length);
   }
 }
