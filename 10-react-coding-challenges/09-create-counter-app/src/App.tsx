@@ -6,13 +6,13 @@ import "./App.css";
   Pressing `Decrement` button should decrease the counter count by 1.
 **/
 export default function App() {
-  const [] = useState(0);
+  const [count, setCount] = useState(0);
 
   return (
     <div>
-      <h2>Counter: 0</h2>
-      <button>Increment</button>
-      <button>Decrement</button>
+      <h2>Counter: {count}</h2>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={() => setCount(count - 1)}>Decrement</button>
     </div>
   );
 }
