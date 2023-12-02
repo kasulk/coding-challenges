@@ -1,8 +1,5 @@
 class File {
   constructor(fullName, contents) {
-    // this.fullName = fullName;
-    // this.filename;
-    // this.extension;
     this.contents = contents;
     this._getsCount = 0;
     this._getcCount = 0;
@@ -26,32 +23,19 @@ class File {
   }
 
   getContents() {
-    // console.log("getContent():", this.contents);
-    // console.log("-----------------------------");
     return this.contents;
   }
-  write(str) {
-    // console.log("write():", str);
-    // console.log("write() before:", this.contents);
-    this.contents = this.contents + "\n" + str;
-    // console.log("write() after:", this.contents);
-    // console.log("-----------------------------");
-  }
-  gets() {
-    // console.log("gets():", this.contents);
-    // console.log("-----------------------------");
-    // console.log("=" + this.contents.split("\n")[this._getsCount + 1]);
 
+  write(str) {
+    if (!this.contents) this.contents = str;
+    else this.contents = this.contents + "\n" + str;
+  }
+
+  gets() {
     return this.contents.split("\n")[this._getsCount++];
   }
-  getc() {
-    console.log("getc():", this.contents);
-    console.log("-----------------------------");
-    console.log("=" + this.contents[this._getcCount + 1]);
 
+  getc() {
     return this.contents[this._getcCount++];
   }
 }
-
-// const bla = new File("testfile.txt", "blabla babbel blub!");
-// console.log(bla);
