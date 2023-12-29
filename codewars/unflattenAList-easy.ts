@@ -4,10 +4,7 @@ export function unflatten(flatArray: number[]): number[] | number[][] {
   for (let i = 0; i < flatArray.length; i++) {
     const curr = flatArray[i];
 
-    if (curr < 3) {
-      output.push(curr);
-      continue;
-    }
+    if (curr < 3) output.push(curr);
 
     if (curr > 2) {
       const subArray: number[] = [];
