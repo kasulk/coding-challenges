@@ -3,7 +3,7 @@ export function choreAssignment(chores: number[]): number[] {
   // loop through half of the array
   // add the smallest number to the biggest
 
-  const sortedChores = chores.sort((a, b) => a - b);
+  const sortedChores = [...chores].sort((a, b) => a - b);
   const workloads: number[] = [];
 
   for (let i = 0; i < chores.length / 2; i++) {
