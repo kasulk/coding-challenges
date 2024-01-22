@@ -3,7 +3,7 @@ export function squarePi(n: number): number {
   // for each digit,
   // square it and add it to a sum
   // get the sqrt of the result,
-  // return it rounded it up
+  // return it round it up
 
   const piDigits =
     "31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679";
