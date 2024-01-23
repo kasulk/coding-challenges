@@ -6,9 +6,10 @@ export function lastSurvivor(letters: string, coords: number[]): string {
   // after the loop, return the remaining string
 
   let lettersArr = letters.split("");
+  const remainingCoords = [...coords];
 
-  while (coords.length > 0) {
-    const nextIndexToBeRemoved = coords.shift();
+  while (remainingCoords.length) {
+    const nextIndexToBeRemoved = remainingCoords.shift();
 
     lettersArr = lettersArr.filter((_, i) => i !== nextIndexToBeRemoved);
   }
