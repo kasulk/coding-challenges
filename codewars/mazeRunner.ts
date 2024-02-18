@@ -12,13 +12,11 @@ export function mazeRunner(maze: number[][], directions: string[]): string {
     }
   }
 
-  for (let i = 0; i < directions.length; i++) {
-    const currDir = directions[i];
-
-    if (currDir === "N") row -= 1;
-    if (currDir === "S") row += 1;
-    if (currDir === "W") col -= 1;
-    if (currDir === "E") col += 1;
+  for (let direction of directions) {
+    if (direction === "N") row -= 1;
+    if (direction === "S") row += 1;
+    if (direction === "W") col -= 1;
+    if (direction === "E") col += 1;
 
     if (!maze[row]) return "Dead";
     if (maze[row][col] === 0) continue;
