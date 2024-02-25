@@ -6,11 +6,11 @@ export function nbMonths(
 ): number[] {
   let currPercentLossByMonth = percentLossByMonth;
   let currPriceDiffCars = startPriceOld - startPriceNew;
-  let moneyNeeded = currPriceDiffCars;
+  let balance = currPriceDiffCars;
   let numMonths = 0;
   let savings = 0;
 
-  while (moneyNeeded < 0) {
+  while (balance < 0) {
     savings += savingperMonth;
     numMonths++;
 
@@ -20,8 +20,8 @@ export function nbMonths(
       (currPriceDiffCars * currPercentLossByMonth) / 100;
     currPriceDiffCars -= currPriceLossCars;
 
-    moneyNeeded = currPriceDiffCars + savings;
+    balance = currPriceDiffCars + savings;
   }
 
-  return [numMonths, Math.round(moneyNeeded)];
+  return [numMonths, Math.round(balance)];
 }
