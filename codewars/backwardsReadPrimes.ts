@@ -13,16 +13,10 @@ export function backwardsPrime(start: number, stop: number): number[] {
 
 function isPrime(num: number): boolean {
   if (num <= 1) return false;
-  if (num <= 3) return true;
-  if (num % 2 === 0 || num % 3 === 0) return false;
 
-  let i = 5;
-  while (i * i <= num) {
-    if (num % i === 0 || num % (i + 2) === 0) {
-      return false;
-    }
-
-    i += 6;
+  // "Trial Division", by chatGPT
+  for (let i = 2; i <= Math.sqrt(num); i++) {
+    if (num % i === 0) return false;
   }
 
   return true;
