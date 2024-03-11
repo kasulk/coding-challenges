@@ -1,23 +1,19 @@
 export function travel(r: string, zipcode: string): string {
   if (!zipcode) return ":/";
 
-  const addresses = r.split(",");
-  const addressesByZip = addresses.filter((address) =>
-    address.includes(zipcode)
-  );
-  const output: string[][] = [[zipcode], [], []];
+  const addresses = r.split(",").filter((address) => address.includes(zipcode));
+  const results: string[][] = [[zipcode], [], []];
 
-  for (let address of addressesByZip) {
+  for (let address of addresses) {
     if (zipcode.length !== 8) break;
 
-    const addressWithoutZipcode = address.slice(0, -zipcode.length - 1);
+    const addressWithoutZip = address.slice(0, -zipcode.length - 1);
+    const houseNo = addressWithoutZip.split(" ", 2)[0];
+    const street = addressWithoutZip.slice(houseNo.length + 1);
 
-    const no = addressWithoutZipcode.split(" ", 2)[0];
-    const street = addressWithoutZipcode.slice(no.length + 1);
-
-    output[1].push(street);
-    output[2].push(no);
+    results[1].push(street);
+    results[2].push(houseNo);
   }
 
-  return zipcode + ":" + output[1].join(",") + "/" + output[2].join(",");
+  return zipcode + ":" + results[1].join(",") + "/" + results[2].join(",");
 }
