@@ -1,14 +1,14 @@
 export function computeDepth(num: number): number {
-  let allDigits = "0123456789".split("");
+  let digits = [..."0123456789"];
 
   for (let i = 1; ; i++) {
     const value = num * i;
     const valueDigits = [...value.toString()];
 
-    valueDigits.forEach((digit) => {
-      allDigits = allDigits.filter((el) => el !== digit);
+    valueDigits.forEach((valueDigit) => {
+      digits = digits.filter((digit) => digit !== valueDigit);
     });
 
-    if (!allDigits.length) return i;
+    if (!digits.length) return i;
   }
 }
