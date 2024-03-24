@@ -1,35 +1,19 @@
 export function howMuch(m: number, n: number): string[][] {
   const [min, max] = [m, n].sort((a, b) => a - b);
-  console.log("min,max:", min, max);
-  if (min === max) return [];
-
   const result: string[][] = [];
-  let money: number;
-  let start = 1;
-  const end = Math.trunc(max / 7);
 
-  for (let i = min - 2; ; i++) {
-    if (i % 7 === 0) {
-      start = i / 7;
-      break;
+  for (let i = min; i <= max; i++) {
+    const allBoatsValue = i - 2;
+    const allCarsValue = i - 1;
+
+    if (allBoatsValue % 7 === 0 && allCarsValue % 9 === 0) {
+      const money = i;
+      const costBoat = allBoatsValue / 7;
+      const costCar = allCarsValue / 9;
+
+      result.push([`M: ${money}`, `B: ${costBoat}`, `C: ${costCar}`]);
     }
   }
-
-  console.log("start, end:", start, end);
-
-  for (let i = start; i <= end; i++) {
-    money = 7 * i + 2;
-    console.log(i, money);
-
-    if (money % 9 === 1 && money <= max) {
-      const boatPrice = i;
-      const carPrice = (money - 1) / 9;
-
-      result.push([`M: ${money}`, `B: ${boatPrice}`, `C: ${carPrice}`]);
-    }
-  }
-
-  console.log("result:", result);
 
   return result;
 }
