@@ -1,33 +1,34 @@
 export function nextBigger(num: number): number {
   const digits = [...num.toString()].map(Number);
   const revDigits = [...digits].reverse();
+  const numDigits = digits.length;
 
-  for (let i = 0; i < digits.length; i++) {
+  for (let i = 0; i < numDigits; i++) {
     const curr = revDigits[i];
-    const lastDigits = revDigits.slice(0, i);
-    const remainingDigits = revDigits.slice(i + 1, revDigits.length).join("");
-    const lastWithCurr = revDigits.slice(0, i + 1);
+    const endWithCurr = revDigits.slice(0, i + 1);
+    const endWithoutCurr = revDigits.slice(0, i);
+    const remainingDigits = revDigits.slice(i + 1, numDigits);
 
-    // remove every digit that is smaller than curr
-    const greaterCurr = lastDigits.filter((digit) => digit > curr);
+    const greaterCurr = endWithoutCurr.filter((digit) => digit > curr);
     if (!greaterCurr.length) continue;
 
     const nextGreaterCurr = greaterCurr.sort((a, b) => a - b)[0];
 
-    // remove nextGreaterCurr from last with curr
-    const newEnd =
-      lastWithCurr
-        .join("")
-        .replace(String(nextGreaterCurr), "")
-        .split("")
-        .map(Number)
-        .sort((a, b) => b - a)
-        .join("") + nextGreaterCurr;
+    const newEndWithCurr = removeOneFromDigits(
+      nextGreaterCurr,
+      endWithCurr
+    ).sort((a, b) => b - a);
 
-    return Number(
-      (newEnd + remainingDigits).toString().split("").reverse().join("")
-    );
+    const newNumStr = [...newEndWithCurr, nextGreaterCurr, ...remainingDigits]
+      .reverse()
+      .join("");
+
+    return Number(newNumStr);
   }
 
   return -1;
+}
+
+function removeOneFromDigits(digit: number, digits: number[]): number[] {
+  return digits.join("").replace(String(digit), "").split("").map(Number);
 }
