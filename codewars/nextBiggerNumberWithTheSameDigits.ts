@@ -1,28 +1,33 @@
-export function nextBigger(n: number): number {
-  // split number into array of digits
-  // sort array
-  //
-  //// create all possible combinations and return the one next to the original number
-  //
-  // first sort the decimals,
-  // then the hundreds, then the thousands and so on...
+export function nextBigger(num: number): number {
+  const digits = [...num.toString()].map(Number);
+  const revDigits = [...digits].reverse();
 
-  if (Number(n.toString.split("").sort().join("")) === n) return -1;
+  for (let i = 0; i < digits.length; i++) {
+    const curr = revDigits[i];
+    const lastDigits = revDigits.slice(0, i);
+    const remainingDigits = revDigits.slice(i + 1, revDigits.length).join("");
+    const lastWithCurr = revDigits.slice(0, i + 1);
 
-  return 0;
+    // remove every digit that is smaller than curr
+    const greaterCurr = lastDigits.filter((digit) => digit > curr);
+    if (!greaterCurr.length) continue;
+
+    const nextGreaterCurr = greaterCurr.sort((a, b) => a - b)[0];
+
+    // remove nextGreaterCurr from last with curr
+    const newEnd =
+      lastWithCurr
+        .join("")
+        .replace(String(nextGreaterCurr), "")
+        .split("")
+        .map(Number)
+        .sort((a, b) => b - a)
+        .join("") + nextGreaterCurr;
+
+    return Number(
+      (newEnd + remainingDigits).toString().split("").reverse().join("")
+    );
+  }
+
+  return -1;
 }
-
-// 1234, 1243
-// 1324, 1342
-// 1432, 2134
-// 4-243, 4-342
-// 2-371, 2-713
-
-// sort, then put the digit which is the next bigger to the original first one in the first place
-/// index +1
-// and remove it from the sorted array
-
-// then the smallest, then the next smallest and so on...
-
-// take the last 2 digits
-// if the last is larger than the first, switch them
