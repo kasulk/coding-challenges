@@ -16,6 +16,13 @@ export function diag1Sym(str: string): string {
   return result.join("\n");
 }
 
-export function selfieAndDiag1(strng: string): string {}
+export function selfieAndDiag1(str: string): string {
+  const diag = diag1Sym(str).split("\n");
+
+  return str
+    .split("\n")
+    .map((word, i) => `${word}|${diag[i]}`)
+    .join("\n");
+}
 
 export function oper(fct: (s: string) => string, s: string): string {}
