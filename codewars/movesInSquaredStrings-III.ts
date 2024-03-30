@@ -1,4 +1,9 @@
-export function rot90Clock(strng: string): string {}
+export function rot90Clock(str: string): string {
+  return diag1Sym(str)
+    .split("\n")
+    .map((word) => word.split("").reverse().join(""))
+    .join("\n");
+}
 
 export function diag1Sym(str: string): string {
   const result: string[] = ["", "", "", ""];
