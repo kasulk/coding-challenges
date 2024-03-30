@@ -6,8 +6,9 @@ export function rot90Clock(str: string): string {
 }
 
 export function diag1Sym(str: string): string {
-  const result: string[] = ["", "", "", ""];
+  const result: string[] = [];
   const words = str.split("\n");
+  words.forEach((word) => result.push(""));
 
   words.forEach((word) =>
     word.split("").forEach((char, i) => (result[i] += char))
@@ -17,12 +18,14 @@ export function diag1Sym(str: string): string {
 }
 
 export function selfieAndDiag1(str: string): string {
-  const diag = diag1Sym(str).split("\n");
+  const diagWords = diag1Sym(str).split("\n");
 
   return str
     .split("\n")
-    .map((word, i) => `${word}|${diag[i]}`)
+    .map((word, i) => `${word}|${diagWords[i]}`)
     .join("\n");
 }
 
-export function oper(fct: (s: string) => string, s: string): string {}
+export function oper(fct: (str: string) => string, str: string): string {
+  return fct(str);
+}
