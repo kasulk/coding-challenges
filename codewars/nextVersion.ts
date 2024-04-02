@@ -1,19 +1,22 @@
 export function nextVersion(version: string): string {
-  const versionArr = version.split(".");
-  const numDots = versionArr.length - 1;
+  const versionDigits = version.split(".");
+  const numDots = versionDigits.length - 1;
 
-  const versionNum = BigInt(versionArr.join(""));
-  const newVersionNum = versionNum + 1n;
+  const oldVersionNum = BigInt(versionDigits.join(""));
+  const newVersionNum = oldVersionNum + 1n;
 
   const newVersionDigits = newVersionNum.toString().split("");
-  let nextVersion: string[] = [];
+  let newVersion: string[] = [];
 
-  for (let i = 0; i < numDots; i++) {
+  for (let i = 1; i <= numDots; i++) {
     const currDigit = newVersionDigits.pop();
-    nextVersion.unshift(currDigit!);
+    newVersion.unshift(currDigit!);
   }
 
-  const firstNumber = newVersionDigits.join("") || 0;
+  const newVersionDigitsRest = newVersionDigits.join("") || "0";
+  const newVersionFirstDigit = newVersionDigitsRest;
 
-  return [firstNumber, ...nextVersion].join(".");
+  newVersion = [newVersionFirstDigit, ...newVersion];
+
+  return newVersion.join(".");
 }
