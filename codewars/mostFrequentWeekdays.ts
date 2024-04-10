@@ -1,8 +1,5 @@
 export function mostFrequentDays(year: number): string[] {
-  const output: string[] = [];
-  const januaryFirst = `${year}-01-01`;
-  const firstDayOfYearInMilSecs = new Date(januaryFirst).getTime();
-  const oneDayInMilSecs = 24 * 60 * 60 * 1000;
+  const result: string[] = [];
   const weekdays =
     "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday".split(",");
   const weekdayCounts: { [key: string]: number } = {
@@ -15,6 +12,9 @@ export function mostFrequentDays(year: number): string[] {
     Sunday: 0,
   };
 
+  const firstDayOfYearInMilSecs = new Date(`${year}-01-01`).getTime();
+  const oneDayInMilSecs = 24 * 60 * 60 * 1000;
+
   for (let i = firstDayOfYearInMilSecs; ; i += oneDayInMilSecs) {
     const currDate = new Date(i);
     if (currDate.getFullYear() === year + 1) break;
@@ -25,11 +25,11 @@ export function mostFrequentDays(year: number): string[] {
     weekdayCounts[currDayName]++;
   }
 
-  const maxDaysNum = Math.max(...Object.values(weekdayCounts));
+  const maxDaysCount = Math.max(...Object.values(weekdayCounts));
 
   Object.entries(weekdayCounts).forEach(([weekday, count]) => {
-    if (count === maxDaysNum) output.push(weekday);
+    if (count === maxDaysCount) result.push(weekday);
   });
 
-  return output;
+  return result;
 }
