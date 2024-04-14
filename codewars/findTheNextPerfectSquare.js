@@ -1,7 +1,5 @@
 function findNextSquare(square) {
   const squareRoot = Math.sqrt(square);
 
-  if (Number.isInteger(squareRoot)) return (squareRoot + 1) ** 2;
-
-  return -1;
+  return Number.isInteger(squareRoot) ? (squareRoot + 1) ** 2 : -1;
 }
