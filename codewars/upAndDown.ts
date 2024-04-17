@@ -1,48 +1,47 @@
 export function arrange(str: string): string {
-  const words = str.split(" ");
   const result: string[] = [];
+  const words = str.split(" ");
   let i = 0;
 
-  // console.log("====================");
+  function keep(str: string): void {
+    result.push(str);
+  }
+
+  function putBack(str: string): void {
+    words.unshift(str);
+  }
 
   while (words.length) {
     if (words.length === 1) {
-      let last = words.pop()!;
-      if (i % 2 === 0) last = last.toLowerCase();
-      else last = last.toUpperCase();
-      return [...result, last].join(" ");
+      const lastWord = words.pop()!;
+      keep(lastWord);
+      break;
     }
-    // console.log(i, words.length);
-    // console.log(words.join(" "));
 
-    const currPair = words.splice(0, 2); // [wall, them]
-    // console.log(currPair.join(" "), "+", words.join(" "));
+    const currPair = words.splice(0, 2);
+    const [first, second] = currPair;
 
-    if (currPair[0].length === currPair[1].length) {
-      if (i % 2 === 0) result.push(currPair[0].toLowerCase());
-      else result.push(currPair[0].toUpperCase());
-
-      words.unshift(currPair[1]);
+    if (first.length === second.length) {
+      keep(first);
+      putBack(second);
       i++;
       continue;
     }
 
-    let [shorter, longer] = [...currPair].sort((a, b) => a.length - b.length);
-    // console.log("sortedPair:", shorter, longer);
+    const [shorter, longer] = currPair.sort((a, b) => a.length - b.length);
 
     if (i % 2 === 0) {
-      result.push(shorter.toLowerCase());
-      words.unshift(longer);
+      keep(shorter);
+      putBack(longer);
     } else {
-      result.push(longer.toUpperCase());
-      words.unshift(shorter);
+      keep(longer);
+      putBack(shorter);
     }
 
     i++;
-    // console.log("--------------------");
   }
 
-  return result.join(" ");
+  return result
+    .map((word, i) => (i % 2 === 0 ? word.toLowerCase() : word.toUpperCase()))
+    .join(" ");
 }
-
-// arrange("who hit retaining The That a we taken");
