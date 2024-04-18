@@ -6,11 +6,9 @@ export function catalog(str: string, article: string): string {
 
   return foundArticles
     .map((article) => {
-      const texts = [...article.matchAll(/>(.*?)</g)].map((match) => match[1]);
+      const values = [...article.matchAll(/>(.*?)</g)].map((match) => match[1]);
 
-      const name = texts[1];
-      const price = texts[3];
-      const quantity = texts[5];
+      const [name, price, quantity] = values.filter((value) => value);
 
       return `${name} > prx: $${price} qty: ${quantity}`;
     })
