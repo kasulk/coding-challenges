@@ -3,11 +3,10 @@ export function Mormons(
   reach: number,
   target: number
 ): number {
-  let newStartNum = startNum;
   let numMissions = 0;
 
-  while (newStartNum < target) {
-    newStartNum = newStartNum + newStartNum * reach;
+  while (startNum < target) {
+    startNum += startNum * reach;
     numMissions++;
   }
 
