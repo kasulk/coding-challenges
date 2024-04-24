@@ -1,20 +1,22 @@
 export function sumOfIntervals(intervals: [number, number][]): number {
   intervals.sort((a, b) => a[0] - b[0]);
 
-  let startLen = 0;
-  let endLen = intervals.length;
+  let startLen = intervals.length;
+  let endLen: number | null = null;
 
-  while (startLen != endLen) {
+  while (startLen !== endLen) {
     startLen = intervals.length;
 
     for (let i = 0; i < intervals.length; i++) {
-      let [currStart, currEnd] = intervals.splice(i, 1)[0];
+      const currInterval = intervals.splice(i, 1)[0];
+      let [currStart, currEnd] = currInterval;
 
       // loop through rest of elements
       for (let j = 0; j < intervals.length; j++) {
         const [start, end] = intervals[j];
-        if (isInRange(start, [currStart, currEnd])) {
+        if (isInRange(start, currInterval)) {
           intervals.splice(j, 1);
+          // merge intervals
           currStart = Math.min(currStart, start);
           currEnd = Math.max(currEnd, end);
         }
@@ -33,7 +35,3 @@ function isInRange(num: number, range: [number, number]): boolean {
   const [start, end] = range;
   return start <= num && num < end;
 }
-
-// function mergeIntervals(interval1, interval2): number[] {
-// return [0];
-// }
