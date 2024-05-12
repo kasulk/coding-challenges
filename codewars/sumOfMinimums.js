@@ -1,5 +1,3 @@
-function sumOfMinimums(numsArr) {
-  return numsArr
-    .map((nums) => Math.min(...nums))
-    .reduce((sum, num) => sum + num);
+function sumOfMinimums(numArrs) {
+  return numArrs.reduce((sum, nums) => sum + Math.min(...nums), 0);
 }
