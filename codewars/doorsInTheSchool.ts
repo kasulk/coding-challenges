@@ -1,17 +1,20 @@
-export function doors(n: number): number {
-  const doors: ("closed" | "open")[] = Array(n).fill("closed");
+export function doors(numDoors: number): number {
+  const doors: ("closed" | "open")[] = Array(numDoors).fill("closed");
 
-  let pupilNum = 1;
-  let doorNum = 0;
+  let pupil = 1;
 
-  while (pupilNum <= doors.length) {
-    while (doorNum < n - pupilNum + 1) {
-      doorNum += pupilNum;
-      doors[doorNum - 1] = doors[doorNum - 1] === "closed" ? "open" : "closed";
+  while (pupil <= numDoors) {
+    let door = 0;
+
+    // change every door that is a multiple of pupil
+    while (door <= numDoors - pupil) {
+      door += pupil;
+      const doorIndex = door - 1;
+
+      doors[doorIndex] = doors[doorIndex] === "closed" ? "open" : "closed";
     }
 
-    doorNum = 0;
-    pupilNum++;
+    pupil++;
   }
 
   return doors.filter((door) => door === "open").length;
