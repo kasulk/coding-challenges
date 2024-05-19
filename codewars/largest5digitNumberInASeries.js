@@ -7,14 +7,14 @@ function solution(digits) {
 
       if (currDigit === i) {
         const str5digits = digits.slice(j, j + 5);
-        const num5digits = Number(str5digits);
 
         if (str5digits.length === 5) {
+          const num5digits = Number(str5digits);
           if (num5digits > max) max = num5digits;
         }
       }
     }
-    if (max > 0) return max;
+    if (max) return max;
   }
 
   return max;
