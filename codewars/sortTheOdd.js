@@ -1,14 +1,5 @@
 function sortArray(nums) {
-  const oddNums = [];
-  const evenNums = nums.map((num) => {
-    if (num % 2 === 0) return num;
-    oddNums.push(num);
-    return "x";
-  });
+  const oddNums = nums.filter((num) => num % 2 !== 0).sort((a, b) => a - b);
 
-  oddNums.sort((a, b) => a - b);
-
-  return evenNums.map((element) =>
-    element === "x" ? oddNums.shift() : element
-  );
+  return nums.map((num) => (num % 2 === 0 ? num : oddNums.shift()));
 }
