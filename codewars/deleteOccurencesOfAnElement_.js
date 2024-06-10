@@ -1,13 +1,13 @@
 function deleteNth(nums, n) {
-  const occurences = {};
+  const numCounts = {};
 
   return nums
     .map((num) => {
-      if (!occurences[num]) occurences[num] = 0;
-      occurences[num]++;
+      if (!numCounts[num]) numCounts[num] = 0;
+      numCounts[num]++;
 
-      if (occurences[num] > n) return null;
+      if (numCounts[num] > n) return null;
       return num;
     })
-    .filter((num) => num != null);
+    .filter((num) => num !== null);
 }
