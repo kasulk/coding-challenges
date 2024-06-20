@@ -12,14 +12,9 @@ export function isSatorSquare(tablet: string[][]): boolean {
       .reverse()
       .join("");
 
-    if (
-      !(
-        leftToRight === topToBottom &&
-        topToBottom === bottomToTop &&
-        bottomToTop === rightToLeft
-      )
-    )
-      return false;
+    if (leftToRight !== topToBottom) return false;
+    if (topToBottom !== bottomToTop) return false;
+    if (bottomToTop !== rightToLeft) return false;
   }
 
   return true;
