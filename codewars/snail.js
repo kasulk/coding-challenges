@@ -3,7 +3,6 @@ function snail(arrays) {
 
   while (arrays.length) {
     const currFirstRow = arrays.shift();
-    if (!currFirstRow) break;
     result.push(currFirstRow);
 
     const currLastRow = arrays.pop();
