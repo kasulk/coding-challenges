@@ -3,7 +3,9 @@ function rot13(message) {
 
   return [...message]
     .map((char) => {
-      if (!alphabet.includes(char.toLowerCase())) return char;
+      const isLetter = alphabet.includes(char.toLowerCase());
+      if (!isLetter) return char;
+
       const isLowerCase = alphabet.includes(char);
       const currIndex = alphabet.indexOf(char.toLowerCase());
       const newindex = (currIndex + 13) % 26;
