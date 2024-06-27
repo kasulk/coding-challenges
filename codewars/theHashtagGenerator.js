@@ -1,7 +1,7 @@
 function generateHashtag(str) {
   const words = str.trim().replace(/\s+/g, " ");
 
-  if (!words || words === " ") return false;
+  if (!words) return false;
 
   const hashtag =
     "#" +
