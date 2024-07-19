@@ -1,5 +1,5 @@
 export function gettingMad(nums: number[]): number {
-  const sortedNums = nums.sort((a, b) => a - b);
+  const sortedNums = nums.slice().sort((a, b) => a - b);
 
   return sortedNums.reduce((minDiff, curr, i) => {
     const prev = sortedNums[i - 1];
