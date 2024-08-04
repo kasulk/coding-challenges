@@ -1,5 +1,4 @@
 function triangle(row) {
-  const colors = "RGB";
   let currRow = row;
   let nextRow = "";
 
@@ -9,7 +8,7 @@ function triangle(row) {
       const next = currRow[i + 1];
 
       if (next === curr) nextRow += curr;
-      else nextRow += colors.replace(curr, "").replace(next, "");
+      else nextRow += "RGB".replace(curr, "").replace(next, "");
     }
 
     currRow = nextRow;
