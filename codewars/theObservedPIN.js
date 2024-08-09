@@ -1,10 +1,9 @@
 function getPINs(observed) {
   const allPossibleNums = observed
     .split("")
-    .map(Number)
     .map((digit) => getNeighbours(digit));
 
-  if (allPossibleNums.length === 1) return allPossibleNums[0].map(String);
+  if (allPossibleNums.length === 1) return allPossibleNums[0];
 
   let result;
   for (let i = 0; i < allPossibleNums.length - 1; i++) {
@@ -22,7 +21,7 @@ function getAllPossibleCombinationsFrom2Arrs(nums1, nums2) {
 
   nums1.forEach((num1) => {
     nums2.forEach((num2) => {
-      const newNum = String(num1) + String(num2);
+      const newNum = num1 + num2;
       newNums.push(newNum);
     });
   });
@@ -32,10 +31,10 @@ function getAllPossibleCombinationsFrom2Arrs(nums1, nums2) {
 
 function getNeighbours(key) {
   const keypad = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-    [null, 0, null],
+    ["1", "2", "3"],
+    ["4", "5", "6"],
+    ["7", "8", "9"],
+    ["", "0", ""],
   ];
 
   const neighbours = [];
@@ -52,5 +51,5 @@ function getNeighbours(key) {
     }
   });
 
-  return neighbours.filter((num) => num !== null && num !== undefined);
+  return neighbours.filter((num) => num);
 }
