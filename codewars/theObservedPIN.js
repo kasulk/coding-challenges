@@ -1,32 +1,28 @@
 function getPINs(observed) {
-  const allPossibleNums = observed
-    .split("")
-    .map((digit) => getNeighbours(digit));
+  const allPossibleDigits = [...observed].map((digit) => getNeighbours(digit));
 
-  if (allPossibleNums.length === 1) return allPossibleNums[0];
+  if (observed.length === 1) return allPossibleDigits[0];
 
-  let result;
-  for (let i = 0; i < allPossibleNums.length - 1; i++) {
-    const currArr = result || allPossibleNums[i];
-    const nextArr = allPossibleNums[i + 1];
+  let pins;
 
-    result = getAllPossibleCombinationsFrom2Arrs(currArr, nextArr);
+  for (let i = 0; i < allPossibleDigits.length - 1; i++) {
+    const currArr = pins || allPossibleDigits[i];
+    const nextArr = allPossibleDigits[i + 1];
+
+    pins = getAllCombosFrom2Arrs(currArr, nextArr);
   }
 
-  return result;
+  return pins;
 }
 
-function getAllPossibleCombinationsFrom2Arrs(nums1, nums2) {
-  const newNums = [];
+function getAllCombosFrom2Arrs(strs1, strs2) {
+  const newStrs = [];
 
-  nums1.forEach((num1) => {
-    nums2.forEach((num2) => {
-      const newNum = num1 + num2;
-      newNums.push(newNum);
-    });
+  strs1.forEach((str1) => {
+    strs2.forEach((str2) => newStrs.push(str1 + str2));
   });
 
-  return newNums;
+  return newStrs;
 }
 
 function getNeighbours(key) {
@@ -37,19 +33,21 @@ function getNeighbours(key) {
     ["", "0", ""],
   ];
 
-  const neighbours = [];
+  return keypad
+    .reduce((acc, row, i) => {
+      if (row.includes(key)) {
+        const j = row.indexOf(key);
+        const prevRow = keypad[i - 1];
+        const nextRow = keypad[i + 1];
 
-  keypad.forEach((row, i) => {
-    if (row.includes(key)) {
-      const prevRow = keypad[i - 1];
-      const nextRow = keypad[i + 1];
-      const j = row.indexOf(key);
+        const numLeft = row[j - 1];
+        const numRight = row[j + 1];
+        const numUp = prevRow ? prevRow[j] : null;
+        const numDown = nextRow ? nextRow[j] : null;
 
-      neighbours.push(key, row[j - 1], row[j + 1]);
-      neighbours.push(prevRow ? prevRow[j] : null);
-      neighbours.push(nextRow ? nextRow[j] : null);
-    }
-  });
-
-  return neighbours.filter((num) => num);
+        acc.push(key, numLeft, numRight, numUp, numDown);
+      }
+      return acc;
+    }, [])
+    .filter((num) => num);
 }
