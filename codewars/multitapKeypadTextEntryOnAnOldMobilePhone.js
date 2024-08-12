@@ -22,8 +22,7 @@ function presses(phrase) {
     .reduce((sum, char) => {
       for (const button of keypad) {
         const buttonChars = button[0].split("");
-        const charIndex = buttonChars.indexOf(char);
-        numPresses = charIndex + 1;
+        numPresses = buttonChars.indexOf(char) + 1;
         if (numPresses) break;
       }
 
