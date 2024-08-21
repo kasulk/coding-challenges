@@ -1,15 +1,5 @@
 import { MORSE_CODE } from "./preloaded";
 
-export function getTransmissionRate(bits: string): number {
-  const groups = bits.match(/(.)\1*/g) || [];
-  const groupsLengths = groups.map((el) => el.length);
-  return Math.min(...groupsLengths);
-}
-
-export function removeLeadingAndTrailingZeros(bits: string): string {
-  return bits.replace(/^0*|0*$/g, "");
-}
-
 export function decodeBits(bits: string): string {
   const cleanedBits = removeLeadingAndTrailingZeros(bits);
   const rate = getTransmissionRate(cleanedBits);
@@ -32,4 +22,19 @@ export function decodeMorse(morseCode: string): string {
         .join("")
     )
     .join(" ");
+}
+
+// helpers
+export function removeLeadingAndTrailingZeros(bits: string): string {
+  return bits.replace(/^0*|0*$/g, "");
+}
+
+export function getTransmissionRate(bits: string): number {
+  const groups = createArrWithCharGroups(bits);
+  const groupsLengths = groups.map((group) => group.length);
+  return Math.min(...groupsLengths);
+}
+
+export function createArrWithCharGroups(str: string): string[] {
+  return str.match(/(.)\1*/g) || [];
 }
