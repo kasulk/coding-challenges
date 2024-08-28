@@ -1,25 +1,28 @@
-export function sumPairs(ints: number[], sum: number): [number, number] | void {
-  let restInts = ints;
-  const half = sum / 2;
+export function sumPairs(nums: number[], sum: number): [number, number] | void {
+  const halfSum = sum / 2;
+  let restNums = nums;
 
   if (sum % 2 === 0) {
-    restInts = removeFirstHalf(restInts, half);
+    restNums = removeFirstOccurenceOfHalfSum(restNums, halfSum);
   }
 
-  const restSet = new Set(restInts);
+  const uniqueNums = [...new Set(restNums)];
   const diffs: number[] = [];
 
-  for (const num of restSet.values()) {
+  for (const num of uniqueNums) {
     const currDiff = sum - num;
 
-    if (num === half || diffs.includes(num)) return [currDiff, num];
+    if (num === halfSum || diffs.includes(num)) return [currDiff, num];
 
     diffs.push(currDiff);
   }
 }
 
-function removeFirstHalf(nums: number[], half: number): number[] {
-  const newNums = [...nums];
-  newNums.splice(nums.indexOf(half), 1);
-  return newNums;
+function removeFirstOccurenceOfHalfSum(
+  inputNums: number[],
+  halfSum: number
+): number[] {
+  const nums = [...inputNums];
+  nums.splice(inputNums.indexOf(halfSum), 1);
+  return nums;
 }
