@@ -15,5 +15,3 @@ function isPrime(n: number): boolean {
 
   return true;
 }
-
-twinPrime(11);
