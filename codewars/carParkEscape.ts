@@ -1,18 +1,19 @@
 export function escape(carpark: number[][]): string[] {
-  let result: string[] = [];
-  let currPos: number | undefined;
-  let currRoute = "";
+  const directions: string[] = [];
+  const exitPos = carpark[0].length - 1;
   let startLevelNum: number | undefined;
   let verticalDist = 1;
-  const exitPos = carpark[0].length - 1;
+  let currPos: number | undefined;
 
   for (let i = 0; i < carpark.length; i++) {
-    const currLevel = carpark[i];
     const currLevelNum = carpark.length - 1 - i;
+    const currLevel = carpark[i];
+    let isStartLevel = false;
 
-    if (currLevel.includes(2)) {
+    if (!startLevelNum && currLevel.includes(2)) {
       currPos = currLevel.indexOf(2);
       startLevelNum = currLevelNum;
+      isStartLevel = true;
     }
 
     if (currPos === undefined) continue;
@@ -23,24 +24,21 @@ export function escape(carpark: number[][]): string[] {
 
     currPos = staircasePos;
 
-    if (!distance) {
-      if (!isLastLevel) {
-        verticalDist++;
-        continue;
-      }
+    if (!distance && !isLastLevel) {
+      verticalDist++;
+      continue;
     }
 
-    // no D's on first position
-    if (currLevelNum !== startLevelNum) {
-      result.push("D" + verticalDist);
+    if (!isStartLevel) {
+      directions.push("D" + verticalDist);
       verticalDist = 1;
     }
 
     if (distance) {
-      currRoute = (distance > 0 ? "L" : "R") + Math.abs(distance);
-      result.push(currRoute);
+      const currRoute = (distance > 0 ? "L" : "R") + Math.abs(distance);
+      directions.push(currRoute);
     }
   }
 
-  return result;
+  return directions;
 }
