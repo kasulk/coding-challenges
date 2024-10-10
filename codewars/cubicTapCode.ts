@@ -1,6 +1,4 @@
-type Object = { [key: string]: string };
-
-const map: Object = {
+const map: { [key: string]: string } = {
   "A": ". . .",
   "B": ".. . .",
   "C": "... . .",
@@ -42,7 +40,7 @@ export function encode(str: string): string {
 }
 
 export function decode(str: string): string {
-  const result: string[] = [];
+  const chars: string[] = [];
   let triple: string[] = [];
 
   str.split(" ").forEach((dots, i) => {
@@ -51,10 +49,10 @@ export function decode(str: string): string {
     if (i % 3 === 2) {
       const charDots = triple.join(" ");
       const char = reversedMap[charDots];
-      result.push(char);
+      chars.push(char);
       triple = [];
     }
   });
 
-  return result.join("");
+  return chars.join("");
 }
