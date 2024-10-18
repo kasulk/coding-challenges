@@ -1,32 +1,28 @@
 export function decoder(sequence: string): number[] {
   const nums: number[] = [];
-  let preZeroCount = 0;
-  let numBits = 0;
-  let currBits = "";
   let isBitMode = false;
+  let currBits = "";
+  let preZeroCount = 0;
+  let numCurrBits = 0;
 
-  for (let i = 0; i < sequence.length; i++) {
-    const curr = sequence[i];
-
-    if (curr === "1" && !isBitMode) {
-      numBits = preZeroCount + 1;
-      preZeroCount = 0;
+  for (const element of sequence) {
+    if (element === "1" && !isBitMode) {
       isBitMode = true;
+      numCurrBits = preZeroCount + 1;
+      preZeroCount = 0;
     }
 
-    if (!isBitMode) {
-      preZeroCount++;
-    }
+    if (!isBitMode) preZeroCount++;
 
-    if (isBitMode && numBits) {
-      currBits += curr;
-      numBits--;
+    if (isBitMode && numCurrBits) {
+      currBits += element;
+      numCurrBits--;
 
-      if (!numBits) {
-        const currNum = parseInt(currBits, 2) - 1;
-        nums.push(currNum);
+      if (!numCurrBits) {
+        const decodedNum = parseInt(currBits, 2);
+        nums.push(decodedNum - 1);
+
         currBits = "";
-
         isBitMode = false;
       }
     }
