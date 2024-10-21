@@ -1,27 +1,30 @@
-export function primeFactors(n: number): string {
+export function primeFactors(num: number): string {
   let result: string = "";
-  let rest = n;
+  let rest = num;
 
-  for (let i = 2; i <= Math.sqrt(rest); i++) {
-    if (!isPrime(i)) continue;
-    let power = 0;
+  for (let factor = 2; factor <= Math.sqrt(rest); factor++) {
+    if (isPrime(factor)) {
+      let power = 0;
 
-    while (rest % i === 0) {
-      power++;
-      rest /= i;
-    }
+      while (rest % factor === 0) {
+        power++;
+        rest /= factor;
+      }
 
-    if (power) {
-      result += power > 1 ? `(${i}**${power})` : `(${i})`;
+      if (power) {
+        result += power > 1 ? `(${factor}**${power})` : `(${factor})`;
+      }
     }
   }
 
-  return rest === 1 ? result : result + `(${rest})`;
+  result += rest === 1 ? "" : `(${rest})`;
+
+  return result;
 }
 
-function isPrime(n: number): boolean {
-  for (let i = 2; i <= Math.sqrt(n); i++) {
-    if (n % i === 0) return false;
+function isPrime(num: number): boolean {
+  for (let i = 2; i <= Math.sqrt(num); i++) {
+    if (num % i === 0) return false;
   }
   return true;
 }
