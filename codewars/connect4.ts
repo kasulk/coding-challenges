@@ -1,5 +1,4 @@
 export class Connect4 {
-  currPlayer: 1 | 2 = 1;
   grid: number[][] = [
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
@@ -8,11 +7,8 @@ export class Connect4 {
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
   ];
+  currPlayer: 1 | 2 = 1;
   isWon: boolean = false;
-
-  constructor() {
-    // Good luck
-  }
 
   play(col: number): string {
     if (this.isWon) return "Game has finished!";
@@ -20,47 +16,38 @@ export class Connect4 {
 
     this.placeChip(col);
 
-    const turnResult = this.isWon
+    const turn = this.isWon
       ? `Player ${this.currPlayer} wins!`
       : `Player ${this.currPlayer} has a turn`;
-    //
+
     this.switchPlayer();
-    // console.log(this.grid.map((row) => row.join("")).join("\n"), "\n");
-    return turnResult;
+
+    return turn;
   }
 
   placeChip(col: number): void {
     this.grid.reverse();
-    for (let i = 0; i < this.grid.length; i++) {
-      const currRow = this.grid[i];
+
+    for (let rowNum = 0; rowNum < this.grid.length; rowNum++) {
+      const currRow = this.grid[rowNum];
       const currCell = currRow[col];
       if (!currCell) {
-        // row[col] = this.currPlayer;
-        this.grid[i][col] = this.currPlayer;
-        // check win
-        if (this.isFourInARow(currRow)) this.isWon = true;
-        if (this.isFourInACol(col)) this.isWon = true;
-        if (this.isFourInDiagonal(col, i)) this.isWon = true;
+        this.grid[rowNum][col] = this.currPlayer;
+        this.setIsWon(currRow, col, rowNum);
         break;
       }
     }
 
-    // for (const row of this.grid.reverse()) {
-    // let currCell = row[col];
-    // if (!currCell) {
-    //   row[col] = this.currPlayer;
-    //   // check win
-    //   if (this.isFourInARow(row)) this.isWon = true;
-    //   if (this.isFourInACol(col)) this.isWon = true;
-    //   if (this.isFourInDiagonal(col, row)) this.isWon = true;
-    //   break;
-    // }
-    // }
     this.grid.reverse();
   }
 
+  setIsWon(cells: number[], col: number, row: number): void {
+    if (this.isFourInARow(cells)) this.isWon = true;
+    if (this.isFourInACol(col)) this.isWon = true;
+    if (this.isFourInDiagonal(col, row)) this.isWon = true;
+  }
+
   isFourInARow(row: number[]): boolean {
-    // const fourOfCurrPlayer = this.currPlayer.toString().repeat(4);
     const fourOfCurrPlayer = this.currPlayer === 1 ? "1111" : "2222";
     return row.join("").includes(fourOfCurrPlayer);
   }
@@ -70,82 +57,51 @@ export class Connect4 {
     return this.isFourInARow(colCells);
   }
 
-  // todo:
   isFourInDiagonal(col: number, row: number): boolean {
-    const lastRow = this.grid.length - 1; //5
+    const lastRow = this.grid.length - 1;
     const distCurrRowToLast = lastRow - row;
-    let startCol = col - distCurrRowToLast;
-    let result: number[] = [];
 
-    // bottom-left to top-right
-    for (let row = lastRow, col = startCol; row > 0; row--, col++) {
-      const currCell = this.grid[row][col];
-      // if (!currCell) continue;
-      result.push(currCell);
-      // startCol++;
-    }
-    if (this.isFourInARow(result)) return true;
-    result = [];
+    const bottomLeftToTopRight = this.getBottomLeftToTopRight(
+      col - distCurrRowToLast,
+      lastRow
+    );
 
-    // top-left to bottom-right
-    startCol = col - row;
-    for (let row = 0, col = startCol; row <= lastRow; row++, col++) {
-      const currCell = this.grid[row][col];
-      // if (!currCell) continue;
+    const topLeftToBottomRight = this.getTopLeftToBottomRight(
+      col - row,
+      lastRow
+    );
+
+    return (
+      this.isFourInARow(bottomLeftToTopRight) ||
+      this.isFourInARow(topLeftToBottomRight)
+    );
+  }
+
+  getBottomLeftToTopRight(startCol: number, lastRow: number): number[] {
+    const result: number[] = [];
+    let col = startCol;
+
+    for (let row = lastRow; row > 0; row--) {
+      const currCell = this.grid[row][col] ?? 0;
       result.push(currCell);
-      // startCol++;
+      col++;
     }
-    if (this.isFourInARow(result)) return true;
-    return false;
+    return result;
+  }
+
+  getTopLeftToBottomRight(startCol: number, lastRow: number): number[] {
+    const result: number[] = [];
+    let col = startCol;
+
+    for (let row = 0; row <= lastRow; row++) {
+      const currCell = this.grid[row][col] ?? 0;
+      result.push(currCell);
+      col++;
+    }
+    return result;
   }
 
   switchPlayer(): void {
     this.currPlayer = this.currPlayer === 1 ? 2 : 1;
   }
 }
-// const grid: number[][] = [
-//   [0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 1, 0, 0],
-//   [0, 0, 0, 1, 2, 0, 0],
-//   [0, 0, 1, 1, 2, 0, 0],
-//   [0, 1, 2, 2, 2, 1, 0],
-// ];
-
-const game = new Connect4();
-
-// 4 in diagonal
-game.play(1); // 1
-game.play(2); // 2
-game.play(2); // 1
-game.play(3); // 2
-game.play(3); // 1
-game.play(4); // 2
-game.play(3); // 1
-
-game.play(4); // 2
-game.play(5); // 1
-game.play(4); // 2
-game.play(4); // 1
-
-game.play(0); // 2
-
-// 4 in a col
-// game.play(1);
-// game.play(2);
-// game.play(1);
-// game.play(2);
-// game.play(1);
-// game.play(2);
-// game.play(1);
-// game.play(2);
-
-// 4 in a row
-// game.play(1);
-// game.play(1);
-// game.play(2);
-// game.play(2);
-// game.play(3);
-// game.play(3);
-// game.play(4);
-// game.play(4);
