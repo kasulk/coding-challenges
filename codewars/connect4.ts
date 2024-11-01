@@ -10,7 +10,7 @@ export class Connect4 {
   currPlayer: 1 | 2 = 1;
   isWon: boolean = false;
 
-  play(col: number): string {
+  public play(col: number): string {
     if (this.isWon) return "Game has finished!";
     if (this.grid[0][col]) return "Column full!";
 
@@ -25,7 +25,7 @@ export class Connect4 {
     return turn;
   }
 
-  placeChip(col: number): void {
+  private placeChip(col: number): void {
     this.grid.reverse();
 
     for (let rowNum = 0; rowNum < this.grid.length; rowNum++) {
@@ -41,23 +41,23 @@ export class Connect4 {
     this.grid.reverse();
   }
 
-  setIsWon(cells: number[], col: number, row: number): void {
+  private setIsWon(cells: number[], col: number, row: number): void {
     if (this.isFourInARow(cells)) this.isWon = true;
     if (this.isFourInACol(col)) this.isWon = true;
     if (this.isFourInDiagonal(col, row)) this.isWon = true;
   }
 
-  isFourInARow(row: number[]): boolean {
+  private isFourInARow(row: number[]): boolean {
     const fourOfCurrPlayer = this.currPlayer === 1 ? "1111" : "2222";
     return row.join("").includes(fourOfCurrPlayer);
   }
 
-  isFourInACol(col: number): boolean {
+  private isFourInACol(col: number): boolean {
     const colCells = this.grid.map((row) => row[col]);
     return this.isFourInARow(colCells);
   }
 
-  isFourInDiagonal(col: number, row: number): boolean {
+  private isFourInDiagonal(col: number, row: number): boolean {
     const lastRow = this.grid.length - 1;
     const distCurrRowToLast = lastRow - row;
 
@@ -77,7 +77,7 @@ export class Connect4 {
     );
   }
 
-  getBottomLeftToTopRight(startCol: number, lastRow: number): number[] {
+  private getBottomLeftToTopRight(startCol: number, lastRow: number): number[] {
     const result: number[] = [];
     let col = startCol;
 
@@ -89,7 +89,7 @@ export class Connect4 {
     return result;
   }
 
-  getTopLeftToBottomRight(startCol: number, lastRow: number): number[] {
+  private getTopLeftToBottomRight(startCol: number, lastRow: number): number[] {
     const result: number[] = [];
     let col = startCol;
 
@@ -101,7 +101,8 @@ export class Connect4 {
     return result;
   }
 
-  switchPlayer(): void {
+  // kept public, so you're able to cheat ;)
+  public switchPlayer(): void {
     this.currPlayer = this.currPlayer === 1 ? 2 : 1;
   }
 }
