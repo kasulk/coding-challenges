@@ -1,27 +1,23 @@
 export function evenDigitSquares(a: number, b: number): number[] {
-  const result: number[] = [];
+  const sequence: number[] = [];
   const start = Math.sqrt(a);
   const end = Math.sqrt(b);
 
-  outerLoop: for (let i = start; i <= end; i++) {
+  loopRoots: for (let i = start; i <= end; i++) {
     if (!isEven(i)) continue;
     const square = i ** 2;
-    const digits = digitize(square);
+    const digits = square.toString().split("").map(Number);
 
     for (const digit of digits) {
-      if (!isEven(digit)) continue outerLoop;
+      if (!isEven(digit)) continue loopRoots;
     }
 
-    result.push(square);
+    sequence.push(square);
   }
 
-  return result;
+  return sequence;
 }
 
 function isEven(num: number): boolean {
   return num % 2 === 0;
-}
-
-function digitize(num: number): number[] {
-  return num.toString().split("").map(Number);
 }
