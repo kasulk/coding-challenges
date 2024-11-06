@@ -1,26 +1,28 @@
 export function uncompress(music: string): number[] {
-  return music.split(",").flatMap((el) => {
-    if (el.includes("*")) {
-      const [num, count] = el.split("*").map(Number);
+  return music.split(",").flatMap((token) => {
+    if (token.includes("*")) {
+      const [num, count] = token.split("*").map(Number);
       return Array(count).fill(num);
     }
-    if (el.includes("/")) {
-      const [range, interval] = el.split("/");
-      const [start, end] = range.replace("-", "~").split("~").map(Number);
-      const signedInterval = start < end ? +interval : -interval;
-      const arrLen = Math.abs(start - end) / Number(interval) + 1;
-      return Array(arrLen)
-        .fill(0)
-        .map((_, i) => start + i * signedInterval);
+
+    if (token.includes("/")) {
+      const [range, interval] = token.split("/");
+      return createArrayFromRange(range, Number(interval));
     }
-    if (el.includes("-")) {
-      const [start, end] = el.replace("-", "~").split("~").map(Number);
-      const arrLen = Math.abs(start - end) + 1;
-      const signedInterval = start < end ? +1 : -1;
-      return Array(arrLen)
-        .fill(0)
-        .map((_, i) => start + i * signedInterval);
-    }
-    return Number(el);
+
+    if (token.includes("-")) return createArrayFromRange(token);
+
+    return Number(token);
   });
+}
+
+function createArrayFromRange(range: string, interval: number = 1): number[] {
+  const dashPosition = range.indexOf("-", 1);
+  const start = Number(range.slice(0, dashPosition));
+  const end = Number(range.slice(dashPosition + 1));
+  const arrLen = Math.abs(start - end) / interval + 1;
+  const signedInterval = start < end ? +interval : -interval;
+  return Array(arrLen)
+    .fill(0)
+    .map((_, i) => start + i * signedInterval);
 }
