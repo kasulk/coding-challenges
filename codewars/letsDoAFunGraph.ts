@@ -1,26 +1,19 @@
 export function graph(nums: number[]): string {
-  const maxNum = Math.max(...nums);
   const result: string[] = [];
+  const max = Math.max(...nums);
 
-  const top = " ____ ";
-  const body = "|    |";
-  const empty = "......";
-
-  for (let level = maxNum; level >= 0; level--) {
-    let currLevel = "";
-    let axis = "";
+  for (let level = max; level >= 0; level--) {
+    const axis = level === max ? " ^ " : " | ";
+    let row = "";
 
     for (const num of nums) {
-      if (num === level) currLevel += top;
-      if (num > level) currLevel += body;
-      if (num < level) currLevel += empty;
+      if (num === level) row += " ____ ";
+      if (num > level) row += "|    |";
+      if (num < level) row += "......";
     }
 
-    if (level === maxNum) axis += " ^ ";
-    else axis += " | ";
-
-    currLevel += axis + level;
-    result.push(currLevel);
+    row += axis + level;
+    result.push(row);
   }
 
   return result.join("\n");
