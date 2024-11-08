@@ -1,6 +1,9 @@
-export function isInteresting(num: number, awesomePhrases: number[]): number {
+export function isInteresting(
+  inputNum: number,
+  awesomePhrases: number[]
+): number {
   for (let i = 0; i <= 2; i++) {
-    const currNum = num + i;
+    const currNum = inputNum + i;
     const digits = currNum.toString().split("").map(Number);
 
     if (currNum < 100) continue;
@@ -13,7 +16,7 @@ export function isInteresting(num: number, awesomePhrases: number[]): number {
       isSequentialDecrementing(digits) ||
       isPalindrome(digits)
     ) {
-      return currNum === num ? 2 : 1;
+      return currNum === inputNum ? 2 : 1;
     }
   }
 
@@ -21,15 +24,11 @@ export function isInteresting(num: number, awesomePhrases: number[]): number {
 }
 
 function hasTrailingZeros(digits: number[]): boolean {
-  return isRepdigit(digits.slice(1), 0);
+  return digits.slice(1).every((digit) => digit === 0);
 }
 
-function isRepdigit(digits: number[], optionalNum?: number): boolean {
-  const num = optionalNum ?? digits[0];
-  for (const digit of digits) {
-    if (digit !== num) return false;
-  }
-  return true;
+function isRepdigit(digits: number[]): boolean {
+  return digits.every((digit) => digit === digits[0]);
 }
 
 function isSequentialIncrementing(digits: number[]): boolean {
