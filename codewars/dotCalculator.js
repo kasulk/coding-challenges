@@ -1,5 +1,5 @@
 function dotCalculator(equation) {
-  const [first, operator, second] = equation.replace("/", "").split(" ");
-  const result = eval(`${first.length}${operator}${second.length}`);
+  const [left, operator, right] = equation.replace("/", "").split(" ");
+  const result = eval(`${left.length}${operator}${right.length}`);
   return ".".repeat(result);
 }
