@@ -1,6 +1,6 @@
 export function getInLine(queue: number[]): number {
   let minutes = 0;
-  const prioritizedQueue = prioritize(queue);
+  const prioritizedQueue = prioritizeAndSortQueue(queue);
   let restOfQueue = prioritizedQueue;
 
   for (const guest of prioritizedQueue) {
@@ -9,35 +9,30 @@ export function getInLine(queue: number[]): number {
     minutes++;
 
     if (curr === 0) return minutes;
-    if (curr === 1) restOfQueue = swap(rest);
-    else restOfQueue = rest;
+
+    restOfQueue = curr === 1 ? swap(rest) : rest;
   }
 
   return minutes;
 }
 
-function swap(rest: number[]): number[] {
-  for (let i = 0; i < rest.length / 2; i++) {
-    const curr = rest[i];
-    const swap = rest[rest.length - 1 - i];
-    if (curr === 1 || curr === 3 || swap === 3) continue;
-    rest[i] = swap;
-    rest[rest.length - 1 - i] = curr;
+function swap(queue: number[]): number[] {
+  const newQueue = [...queue];
+
+  for (let i = 0; i < queue.length / 2; i++) {
+    const curr = queue[i];
+    const swapPartner = queue[queue.length - 1 - i];
+    if (curr === 1 || curr === 3 || swapPartner === 3) continue;
+
+    newQueue[i] = swapPartner;
+    newQueue[queue.length - 1 - i] = curr;
   }
 
-  return rest;
+  return newQueue;
 }
 
-function prioritize(queue: number[]): number[] {
-  const priorityGuests = getPriorityGuests(queue).sort((a, b) => a - b);
-  const nonPriorityGuests = getNonPriorityGuests(queue);
-  return [...priorityGuests, ...nonPriorityGuests];
-}
-
-function getPriorityGuests(queue: number[]): number[] {
-  return queue.filter((guest) => guest === 1 || guest === 2);
-}
-
-function getNonPriorityGuests(queue: number[]): number[] {
-  return queue.filter((guest) => guest !== 1 && guest !== 2);
+function prioritizeAndSortQueue(queue: number[]): number[] {
+  const priorityGuests = queue.filter((guest) => guest === 1 || guest === 2);
+  const nonPriorityGuests = queue.filter((guest) => guest !== 1 && guest !== 2);
+  return [...priorityGuests.sort((a, b) => a - b), ...nonPriorityGuests];
 }
