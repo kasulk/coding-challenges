@@ -40,20 +40,20 @@ function unarizeBitGroup(bitGroup: string): string {
   return `${first} ${second}`;
 }
 
-export function receive(text: string): string {
-  let bitGroup = "";
+export function receive(unary: string): string {
+  let binary = "";
   let chars = "";
 
-  text.split(" ").forEach((group, i, arr) => {
+  unary.split(" ").forEach((element, i, arr) => {
     const prev = arr[i - 1];
     if (isOdd(i)) {
       const bit = prev === "0" ? "1" : "0";
-      bitGroup += bit.repeat(group.length);
+      binary += bit.repeat(element.length);
     }
   });
 
-  for (let i = 0; i < bitGroup.length; i += 7) {
-    const currBinary = bitGroup.slice(i, i + 7);
+  for (let i = 0; i < binary.length; i += 7) {
+    const currBinary = binary.slice(i, i + 7);
     const charCode = parseInt(currBinary, 2);
     chars += String.fromCharCode(charCode);
   }
