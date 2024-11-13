@@ -4,6 +4,12 @@ export function send(text: string): string {
   return unary;
 }
 
+export function receive(unary: string): string {
+  const binary = binarizeUnary(unary);
+  const chars = charifyBinary(binary);
+  return chars;
+}
+
 function binarizeStr(str: string): string {
   return str
     .split("")
@@ -12,38 +18,26 @@ function binarizeStr(str: string): string {
 }
 
 function unarizeBinary(binary: string): string {
-  const result: string[] = [];
-  let bitGroup = "";
   let unary = "";
-  let prev = "";
+  let bitGroup = "";
 
-  for (const bit of binary) {
+  binary.split("").forEach((bit, i, arr) => {
+    const prev = arr[i - 1];
     if (prev && bit !== prev) {
-      unary = unarizeBitGroup(bitGroup);
-      result.push(unary);
+      unary += unarizeBitGroup(bitGroup) + " ";
       bitGroup = "";
     }
 
     bitGroup += bit;
-    prev = bit;
-  }
+  });
 
-  unary = unarizeBitGroup(bitGroup);
-  result.push(unary);
-
-  return result.join(" ");
+  return (unary += unarizeBitGroup(bitGroup));
 }
 
 function unarizeBitGroup(bitGroup: string): string {
   const first = bitGroup[0] === "1" ? "0" : "00";
   const second = "0".repeat(bitGroup.length);
   return `${first} ${second}`;
-}
-
-export function receive(unary: string): string {
-  const binary = binarizeUnary(unary);
-  const chars = charifyBinary(binary);
-  return chars;
 }
 
 function binarizeUnary(unary: string): string {
