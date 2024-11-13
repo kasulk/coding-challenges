@@ -41,17 +41,21 @@ function unarizeBitGroup(bitGroup: string): string {
 }
 
 export function receive(unary: string): string {
-  let binary = "";
-  let chars = "";
+  const binary = binarizeUnary(unary);
+  const chars = charifyBinary(binary);
+  return chars;
+}
 
-  unary.split(" ").forEach((element, i, arr) => {
+function binarizeUnary(unary: string): string {
+  return unary.split(" ").reduce((acc, curr, i, arr) => {
     const prev = arr[i - 1];
-    if (isOdd(i)) {
-      const bit = prev === "0" ? "1" : "0";
-      binary += bit.repeat(element.length);
-    }
-  });
+    const bit = prev === "0" ? "1" : "0";
+    return isOdd(i) ? (acc += bit.repeat(curr.length)) : acc;
+  }, "");
+}
 
+function charifyBinary(binary: string): string {
+  let chars = "";
   for (let i = 0; i < binary.length; i += 7) {
     const currBinary = binary.slice(i, i + 7);
     const charCode = parseInt(currBinary, 2);
