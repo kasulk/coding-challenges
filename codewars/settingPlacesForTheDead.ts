@@ -1,15 +1,14 @@
 export function setTable(theDead: string[]): string[] {
   const freeSeat = "_____";
   const table = Array(12).fill(freeSeat);
-  const listOf12 = theDead.slice(0, 12);
 
-  listOf12.forEach((ghost) => {
-    const favoriteSeatNum = getFavoriteSeatNum(ghost) || 0;
+  theDead.slice(0, 12).forEach((ghost) => {
+    const favoriteSeatNum = getFavoriteSeatNum(ghost);
     const favoriteSeat = table[favoriteSeatNum - 1];
 
     if (favoriteSeat === freeSeat) table[favoriteSeatNum - 1] = ghost;
     else {
-      for (let i = 1; i <= 6; i++) {
+      for (let i = 1; i <= table.length / 2; i++) {
         const seatBeforeNum = (favoriteSeatNum - i + 12) % 12 || 12;
         const seatBefore = table[seatBeforeNum - 1];
         if (seatBefore === freeSeat) {
@@ -30,7 +29,7 @@ export function setTable(theDead: string[]): string[] {
   return table;
 }
 
-function getFavoriteSeatNum(name: string): number | null {
+function getFavoriteSeatNum(name: string): number {
   const cornersDict: [string, number][] = [
     ["QUTHCRDMZ", 1],
     ["WEVOXING", 4],
@@ -43,5 +42,5 @@ function getFavoriteSeatNum(name: string): number | null {
     if (featureName.includes(name[0])) return cornerNum;
   }
 
-  return null;
+  throw new Error("Uh-Oh... First char of name is not an upper-case letter!");
 }
