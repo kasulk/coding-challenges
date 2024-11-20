@@ -13,9 +13,9 @@ export function battleCodes(armyLetters: string, armyNumbers: string): string {
     const digitLife = digit - (alphabet.indexOf(lastLetter) + 1);
     const newDigit = digitLife > 0 ? digitLife.toString() : "";
 
-    const newLastLetter = calcNewLetter(lastLetter, digit);
+    const newLastLetter = calcNewLetter(lastLetter, digit, alphabet);
     const newForelastLetter = forelastLetter
-      ? calcNewLetter(forelastLetter, digit)
+      ? calcNewLetter(forelastLetter, digit, alphabet)
       : null;
 
     if (newForelastLetter) armyLettersRemaining.push(newForelastLetter);
@@ -28,9 +28,12 @@ export function battleCodes(armyLetters: string, armyNumbers: string): string {
   return "Draw";
 }
 
-function calcNewLetter(letter: string, digit: number): string | null {
-  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+function calcNewLetter(
+  letter: string,
+  digit: number,
+  alphabet: string
+): string | null {
   const letterPower = alphabet.indexOf(letter) + 1;
-  const letterLife = letterPower - digit;
-  return alphabet[letterLife - 1] || null;
+  const letterLifeRemaining = letterPower - digit;
+  return alphabet[letterLifeRemaining - 1] || null;
 }
