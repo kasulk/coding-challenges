@@ -8,10 +8,5 @@ function solution(text, markers) {
       }
       return line.trimEnd();
     })
-    .join("\n")
-    .trimEnd();
+    .join("\n");
 }
-
-String.prototype.trimEnd = function () {
-  return this.replace(/[ ]+$/, "");
-};
