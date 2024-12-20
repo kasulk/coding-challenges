@@ -5,39 +5,33 @@ export class Vector {
     this.components = components;
   }
 
-  private checkLengths(components: number[]): never | void {
-    if (this.components.length !== components.length) {
-      throw new Error("Hey! Both vectors must have the same length, man!");
-    }
-  }
-
   public add({ components }: Vector): Vector {
-    this.checkLengths(components);
-    const newComponents = this.components.map(
+    this.checkLengths(components, "add");
+    const componentsSums = this.components.map(
       (comp, i) => comp + components[i]
     );
-    return new Vector(newComponents);
+    return new Vector(componentsSums);
   }
 
   public subtract({ components }: Vector): Vector {
-    this.checkLengths(components);
-    const newComponents = this.components.map(
+    this.checkLengths(components, "subtract");
+    const componentsDiffs = this.components.map(
       (comp, i) => comp - components[i]
     );
-    return new Vector(newComponents);
+    return new Vector(componentsDiffs);
   }
 
   public dot({ components }: Vector): number {
-    this.checkLengths(components);
+    this.checkLengths(components, "dot");
     return this.components.reduce(
-      (sum, curr, i) => sum + curr * components[i],
+      (sum, comp, i) => sum + comp * components[i],
       0
     );
   }
 
   public norm(): number {
     const squaresSum = this.components.reduce(
-      (acc, curr) => acc + curr ** 2,
+      (sum, comp) => sum + comp ** 2,
       0
     );
     return Math.sqrt(squaresSum);
@@ -49,5 +43,13 @@ export class Vector {
 
   public toString(): string {
     return `(${this.components.join(",")})`;
+  }
+
+  private checkLengths(components: number[], method: string): never | void {
+    if (this.components.length !== components.length) {
+      throw new Error(
+        `Hey! To ${method} 2 vectors, both vectors must have the same dimension (number of components)!`
+      );
+    }
   }
 }
