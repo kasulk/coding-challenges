@@ -9,15 +9,13 @@ export function minUmbrellas(weather: string[]): number {
     const isMorning = i % 2 === 0;
     const isAfternoon = i % 2 !== 0;
 
-    if (isWet) {
-      if (isMorning) {
-        if (numUmbrellas.home > 0) numUmbrellas.home--;
-        numUmbrellas.work++;
-      }
-      if (isAfternoon) {
-        if (numUmbrellas.work > 0) numUmbrellas.work--;
-        numUmbrellas.home++;
-      }
+    if (isMorning && isWet) {
+      if (numUmbrellas.home) numUmbrellas.home--;
+      numUmbrellas.work++;
+    }
+    if (isAfternoon && isWet) {
+      if (numUmbrellas.work) numUmbrellas.work--;
+      numUmbrellas.home++;
     }
   });
 
