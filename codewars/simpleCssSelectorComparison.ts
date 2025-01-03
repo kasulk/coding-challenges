@@ -14,12 +14,11 @@ export function compare(a: string, b: string): string {
 }
 
 function getSelectorCounts(str: string): [number, number, number] {
-  const selectorCounts: [number, number, number] = [0, 0, 0];
-  const words = str.split(" ");
+  const selectorCounts: [number, number, number] = [0, 0, 0]; // [numIds, numClasses, numTags]
 
   if (str === "*") return selectorCounts;
 
-  words.forEach((word) => {
+  str.split(" ").forEach((word) => {
     word.split("").forEach((char) => {
       if (char === "#") selectorCounts[0]++;
       if (char === ".") selectorCounts[1]++;
