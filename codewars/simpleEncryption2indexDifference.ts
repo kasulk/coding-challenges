@@ -1,33 +1,37 @@
 const charRegion = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,:;-?! '()$%&"`;
 
 export function encrypt(text: string): string {
-  console.log("text:", text);
-
   if (text === null || text === "") return text;
 
-  const caseSwitchedChars = text.split("").map((char, i) => {
-    if (!charRegion.includes(char)) throw new Error("möp!");
-    return i % 2 === 0 ? char : switchCase(char);
-  });
+  const caseSwitchedText = switchCaseEverySecondChar(text);
 
-  return caseSwitchedChars
-    .map((char, i) => {
-      if (!i) return getMirror(char);
+  const encryptedText = caseSwitchedText
+    .split("")
+    .reduce((result, currChar, i) => {
+      if (!charRegion.includes(currChar)) throwNotIncludedError(currChar);
 
-      const charIndex = charRegion.indexOf(char);
+      let encryptedChar = "";
 
-      const prev = caseSwitchedChars[i - 1];
-      const prevIndex = charRegion.indexOf(prev);
+      if (!i) encryptedChar = getMirror(currChar);
+      else {
+        const prevChar = caseSwitchedText[i - 1];
+        const prevCharIndex = charRegion.indexOf(prevChar);
+        const currCharIndex = charRegion.indexOf(currChar);
 
-      const regionIndexDiff = prevIndex - charIndex;
-      const differenceIndex =
-        regionIndexDiff < 0
-          ? charRegion.length + regionIndexDiff
-          : regionIndexDiff;
+        const regionIndexDiff = prevCharIndex - currCharIndex;
+        const encryptedCharIndex =
+          regionIndexDiff < 0
+            ? charRegion.length + regionIndexDiff
+            : regionIndexDiff;
 
-      return charRegion[differenceIndex];
-    })
+        encryptedChar = charRegion[encryptedCharIndex];
+      }
+
+      return [...result, encryptedChar];
+    }, [] as string[])
     .join("");
+
+  return encryptedText;
 }
 
 export function decrypt(encryptedText: string): string {
@@ -36,8 +40,9 @@ export function decrypt(encryptedText: string): string {
   const decryptedText = encryptedText
     .split("")
     .reduce((result, currChar, i) => {
+      if (!charRegion.includes(currChar)) throwNotIncludedError(currChar);
+
       let decryptedChar = "";
-      if (!charRegion.includes(currChar)) throw new Error("möp!");
 
       if (!i) decryptedChar = getMirror(currChar);
       else {
@@ -48,6 +53,7 @@ export function decrypt(encryptedText: string): string {
         const regionIndexDiff = currCharIndex - charRegion.length;
         const decryptedCharIndex =
           (prevCharIndex - regionIndexDiff) % charRegion.length;
+
         decryptedChar = charRegion[decryptedCharIndex];
       }
 
@@ -73,4 +79,8 @@ function getMirror(char: string): string {
   const charIndex = charRegion.indexOf(char);
   const mirrorIndex = charRegion.length - 1 - charIndex;
   return charRegion[mirrorIndex];
+}
+
+function throwNotIncludedError(char: string): never {
+  throw new Error(`"${char}" not included in the region!`);
 }
