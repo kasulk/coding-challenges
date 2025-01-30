@@ -1,30 +1,24 @@
 export function getBestCombination(time: number): string {
-  const methodStandard = getMethodStandard(time);
-  const methodStandardLen = removeConsecutiveDigits(methodStandard).length;
-  const methodAlt = getMethodAlt(time);
-  const methodAltLen = removeConsecutiveDigits(methodAlt).length;
+  const standard = getMinsAndSecsWithStandardMethod(time);
+  const alternat = getMinsAndSecsWithAlternativeMethod(time);
+  const standardMinLen = removeConsecutiveDigits(standard).length;
+  const alternatMinLen = removeConsecutiveDigits(alternat).length;
 
-  if (methodStandardLen > methodAltLen) return methodAlt;
-  if (methodStandardLen < methodAltLen) return methodStandard;
-  if (methodStandard.length > methodAlt.length) return methodAlt;
-  if (methodStandard.length < methodAlt.length) return methodStandard;
-  return methodStandard;
+  if (standardMinLen < alternatMinLen) return standard;
+  if (standardMinLen > alternatMinLen) return alternat;
+  if (standard.length < alternat.length) return standard;
+  if (standard.length > alternat.length) return alternat;
+  return standard;
 }
 
-function convertSecsToMinsAndSecs(timeInSecs: number): number[] {
-  const mins = Math.trunc(timeInSecs / 60);
-  const secs = timeInSecs % 60;
-  return [mins, secs];
-}
-
-function getMethodStandard(time: number): string {
+function getMinsAndSecsWithStandardMethod(time: number): string {
   const [mins, secs] = convertSecsToMinsAndSecs(time);
   return mins
     ? mins.toString() + secs.toString().padStart(2, "0")
     : secs.toString().padStart(2, "0");
 }
 
-function getMethodAlt(time: number): string {
+function getMinsAndSecsWithAlternativeMethod(time: number): string {
   let [mins, secs] = convertSecsToMinsAndSecs(time);
 
   if (mins && secs <= 39) {
@@ -33,6 +27,12 @@ function getMethodAlt(time: number): string {
   }
 
   return mins ? mins.toString() + secs.toString() : secs.toString();
+}
+
+function convertSecsToMinsAndSecs(timeInSecs: number): number[] {
+  const mins = Math.trunc(timeInSecs / 60);
+  const secs = timeInSecs % 60;
+  return [mins, secs];
 }
 
 function removeConsecutiveDigits(strNum: string): string {
