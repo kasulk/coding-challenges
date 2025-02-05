@@ -1,10 +1,11 @@
-function evenOrOdd(strNums) {
+function evenOrOdd(strDigits) {
   let sumEvens = 0;
   let sumOdds = 0;
 
-  strNums.split("").forEach((strNum) => {
-    const num = Number(strNum);
-    num % 2 === 0 ? (sumEvens += num) : (sumOdds += num);
+  strDigits.split("").forEach((strDigit) => {
+    const digit = Number(strDigit);
+    if (digit % 2 === 0) sumEvens += digit;
+    else sumOdds += digit;
   });
 
   if (sumEvens > sumOdds) return "Even is greater than Odd";
