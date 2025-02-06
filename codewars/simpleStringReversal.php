@@ -1,11 +1,12 @@
 <?php
 function solve(string $str): string {
-    $output = '';
+    $chars = str_split($str);
     $strWithoutSpaces = str_replace(' ', '', $str);
     $charsWithoutSpaces = str_split($strWithoutSpaces);
+    $output = '';
 
-    for ($i = 0; $i < strlen($str); $i++) { 
-      if ($str[$i] === ' ') $output .= ' ';
+    foreach ($chars as $char){
+      if ($char === ' ') $output .= ' ';
       else $output .= array_pop($charsWithoutSpaces);
     }
 
