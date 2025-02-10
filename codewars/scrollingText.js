@@ -1,13 +1,12 @@
 function scrollingText(text) {
-  const result = [text.toUpperCase()];
+  const output = [text.toUpperCase()];
 
   for (let i = 0; i < text.length - 1; i++) {
-    const curr = result[i];
-    const currChars = curr.split("");
+    const currChars = output[i].split("");
     const firstChar = currChars.shift();
     currChars.push(firstChar);
-    result.push(currChars.join(""));
+    output.push(currChars.join(""));
   }
 
-  return result;
+  return output;
 }
