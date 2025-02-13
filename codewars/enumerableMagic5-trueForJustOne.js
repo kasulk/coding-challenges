@@ -1,9 +1,3 @@
 function one(arr, fun) {
-  let numTrues = 0;
-
-  for (const element of arr) {
-    if (fun(element)) numTrues++;
-  }
-
-  return numTrues === 1;
+  return arr.reduce((acc, curr) => (fun(curr) ? ++acc : acc), 0) === 1;
 }
