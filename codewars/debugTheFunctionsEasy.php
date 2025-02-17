@@ -1,10 +1,10 @@
 <?php
 function multi(array $nums): int {
-  return array_reduce($nums, fn(int $acc, int $curr) => $acc * $curr, 1);
+  return array_product($nums);
 }
 
 function add(array $nums): int {
-  return array_reduce($nums, fn(int $acc, int $curr) => $acc + $curr, 0);
+  return array_sum($nums);
 }
 
 function reverse(string $str): string {
