@@ -1,18 +1,26 @@
 class Animal {
-  type = "";
-  name = "";
+  _type = "";
+  _name = "";
 
   constructor(name, type) {
-    this.name = name;
-    this.type = type;
+    this._name = name;
+    this._type = type;
   }
 
-  toString() {
-    return `${this.name} is a ${this.type}`;
+  get name() {
+    return this._name;
+  }
+
+  get type() {
+    return this._type;
   }
 
   set name(newName) {
-    this.name = newName;
+    this._name = newName;
+  }
+
+  toString() {
+    return `${this._name} is a ${this._type}`;
   }
 }
 
