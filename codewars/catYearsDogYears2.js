@@ -1,28 +1,21 @@
 function ownedCatAndDog(catYears, dogYears) {
-  let ownedCat = 0;
-  let ownedDog = 0;
-
-  let catYearsLeft = catYears;
-  let dogYearsLeft = dogYears;
-
-  const dict = {
-    0: 15,
-    1: 9,
-  };
-
-  while (catYearsLeft > 0) {
-    const currYears = dict[ownedCat] || 4;
-    if (currYears > catYearsLeft) break;
-    catYearsLeft -= currYears;
-    ownedCat++;
-  }
-
-  while (dogYearsLeft > 0) {
-    const currYears = dict[ownedDog] || 5;
-    if (currYears > dogYearsLeft) break;
-    dogYearsLeft -= currYears;
-    ownedDog++;
-  }
+  const ownedCat = getOwnedPetYears(catYears, [15, 9, 4]);
+  const ownedDog = getOwnedPetYears(dogYears, [15, 9, 5]);
 
   return [ownedCat, ownedDog];
+}
+
+function getOwnedPetYears(petYears, petYearsKey) {
+  const petYearsDefaultKey = petYearsKey.pop();
+  let petYearsLeft = petYears;
+  let ownedPet = 0;
+
+  while (petYearsLeft > 0) {
+    const currYears = petYearsKey[ownedPet] || petYearsDefaultKey;
+    if (currYears > petYearsLeft) break;
+    petYearsLeft -= currYears;
+    ownedPet++;
+  }
+
+  return ownedPet;
 }
