@@ -1,19 +1,15 @@
-function solve(eq) {
-  // let result = "";
+function solve(equation) {
   const result = [];
   let num = "";
 
-  for (let i = 0; i < eq.length; i++) {
-    const curr = eq[i];
-    if (/\d/.test(curr)) num += curr;
+  for (const char of equation) {
+    if (/\d/.test(char)) num += char;
     else {
-      // result = curr + num + result;
-      result.unshift(curr, num);
+      result.unshift(char, num);
       num = "";
     }
   }
 
-  // if (num) result = num + result;
   if (num) result.unshift(num);
 
   return result.join("");
