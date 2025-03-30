@@ -1,5 +1,5 @@
 function unusedDigits(...nums) {
-  const presentDigits = [...new Set(nums)].join("").toString();
+  const presentDigits = [...new Set(nums)].join("");
 
   return "0123456789"
     .split("")
