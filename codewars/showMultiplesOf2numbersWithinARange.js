@@ -1,11 +1,11 @@
-function multiples(first, second, last) {
-  const max = Math.max(first, second);
-  const min = Math.min(first, second);
-  const result = [];
+function getMultiples(first, second, last) {
+  const largeNum = Math.max(first, second);
+  const smallNum = Math.min(first, second);
+  const multiples = [];
 
-  for (let curr = max; curr < last; curr += max) {
-    if (curr % min === 0) result.push(curr);
+  for (let curr = largeNum; curr < last; curr += largeNum) {
+    if (curr % smallNum === 0) multiples.push(curr);
   }
 
-  return result;
+  return multiples;
 }
