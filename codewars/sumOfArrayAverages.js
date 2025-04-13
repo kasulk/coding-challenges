@@ -1,7 +1,9 @@
 function sumAverage(numsArrs) {
-  return Math.floor(
-    numsArrs.reduce((sumAvgs, nums) => sumAvgs + average(nums), 0)
+  const sumAverages = numsArrs.reduce(
+    (sum, currNums) => sum + average(currNums),
+    0
   );
+  return Math.floor(sumAverages);
 }
 
 function average(nums) {
