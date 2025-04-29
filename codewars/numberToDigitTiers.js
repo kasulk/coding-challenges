@@ -1,6 +1,8 @@
 function createArrayOfTiers(num) {
-  return [...num.toString()].reduce((tiers, _, i, nums) => {
-    const curr = nums.slice(0, i + 1).join("");
+  const strDigits = [...num.toString()];
+
+  return strDigits.reduce((tiers, _, i) => {
+    const curr = strDigits.slice(0, i + 1).join("");
     return [...tiers, curr];
   }, []);
 }
