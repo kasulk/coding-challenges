@@ -1,29 +1,15 @@
 export function joust(
-  fieldStart: string[],
+  field: string[],
   vKnightLeft: number,
   vKnightRight: number
 ): string[] {
-  let [tipPosKnightLeft, tipPosKnightRight] = getTipPositions(fieldStart);
-  let fieldUpdated = [...fieldStart];
+  if (!vKnightLeft && !vKnightRight) return field;
+
+  let [tipPosKnightLeft, tipPosKnightRight] = getTipPositions(field);
+  let fieldUpdated = [...field];
 
   while (tipPosKnightLeft < tipPosKnightRight) {
-    if (!vKnightLeft && !vKnightRight) break;
-    fieldUpdated = fieldUpdated.map((knight, i) => {
-      let steps = "";
-
-      if (!i) {
-        steps = " ".repeat(vKnightLeft);
-        if (knight.endsWith(steps || "x"))
-          return steps + knight.slice(0, -vKnightLeft);
-      }
-
-      steps = " ".repeat(vKnightRight);
-      if (knight.startsWith(steps || "x"))
-        return knight.slice(vKnightRight) + steps;
-
-      return knight;
-    });
-
+    fieldUpdated = moveKnights(fieldUpdated, vKnightLeft, vKnightRight);
     [tipPosKnightLeft, tipPosKnightRight] = getTipPositions(fieldUpdated);
   }
 
@@ -35,4 +21,28 @@ function getTipPositions(field: string[]): [number, number] {
   const tipPosKnightLeft = knightLeft.indexOf(">");
   const tipPosKnightRight = knightRight.indexOf("<");
   return [tipPosKnightLeft, tipPosKnightRight];
+}
+
+function moveKnights(
+  field: string[],
+  vKnightLeft: number,
+  vKnightRight: number
+): string[] {
+  return field.map((knight, i) => {
+    let steps = "";
+
+    if (!i) {
+      steps = " ".repeat(vKnightLeft) || "0";
+      if (knight.endsWith(steps)) {
+        return steps + knight.slice(0, -vKnightLeft);
+      }
+    } else {
+      steps = " ".repeat(vKnightRight) || "0";
+      if (knight.startsWith(steps)) {
+        return knight.slice(vKnightRight) + steps;
+      }
+    }
+
+    return knight;
+  });
 }
