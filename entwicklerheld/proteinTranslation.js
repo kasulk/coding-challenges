@@ -4,30 +4,28 @@ export function translate(rnaStrand) {
 
   if (!rnaStrand) return protein;
 
-  for (let i = 0; i <= rnaStrand.length; i++) {
-    const char = rnaStrand[i];
-    const isFirstChar = !i;
-    const isLastChar = i === rnaStrand.length;
-    const nextCodonBegins = !(i % 3);
+  for (const char of rnaStrand) {
+    currCodon += char;
+    const nextCodonBegins = currCodon.length === 3;
 
-    if ((!isFirstChar && nextCodonBegins) || isLastChar) {
+    if (nextCodonBegins) {
       const foundAminoAcid = getAminoAcid(currCodon);
+      currCodon = "";
 
-      if (!foundAminoAcid) throw new Error("Invalid codon");
+      if (!foundAminoAcid) throwInvalidCodonError();
       if (foundAminoAcid === "STOP") break;
 
       protein.push(foundAminoAcid);
-      currCodon = "";
     }
-
-    currCodon += char;
   }
+
+  if (currCodon) throwInvalidCodonError();
 
   return protein;
 }
 
 function getAminoAcid(codon) {
-  const codonAminoAcidDict = {
+  const dict = {
     Methionine: ["AUG"],
     Phenylalanine: ["UUU", "UUC"],
     Leucine: ["UUA", "UUG"],
@@ -38,8 +36,8 @@ function getAminoAcid(codon) {
     STOP: ["UAA", "UAG", "UGA"],
   };
 
-  for (const aminoAcid in codonAminoAcidDict) {
-    const currCodons = codonAminoAcidDict[aminoAcid];
+  for (const aminoAcid in dict) {
+    const currCodons = dict[aminoAcid];
     if (currCodons.includes(codon)) {
       if (aminoAcid === "STOP") return "STOP";
       return aminoAcid;
@@ -49,17 +47,6 @@ function getAminoAcid(codon) {
   return null;
 }
 
-///
-// create some kind of map for the items/names
-/// obj
-
-// cut input str into parts of 3
-// turn into array
-// loop through arr
-// check each item
-// return its name to the arr
-// if name is 'STOP', quit the process, return the result
-// if item is not found, throw error
-
-// translate("AUGUUUUCU");
-translate("AUGU");
+function throwInvalidCodonError() {
+  throw new Error("Invalid codon");
+}
